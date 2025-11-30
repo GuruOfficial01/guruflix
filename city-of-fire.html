@@ -4,414 +4,524 @@
   <meta charset="UTF-8" />
   <title>City Of Fire – GuruMovies</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <style>
     :root {
-      --bg-main: #050816;
-      --bg-card: #020617;
+      --bg-main: #020617;
+      --card-bg: #020617;
       --accent: #06b6d4;
       --accent-soft: #0ea5e9;
-      --text-main: #f3f4f6;
+      --accent-green: #22c55e;
+      --text-main: #f9fafb;
       --text-muted: #9ca3af;
+      --border-subtle: rgba(148, 163, 184, 0.25);
       --gold: #fbbf24;
+      --radius-lg: 18px;
+      --shadow-soft: 0 24px 55px rgba(0, 0, 0, 0.95);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     body {
-      font-family: system-ui, Arial;
-      background: radial-gradient(circle at top, #111827 0%, #050816 65%);
-      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
       min-height: 100vh;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 55%, #000 100%);
+      color: var(--text-main);
     }
 
-    a { text-decoration: none; color: inherit; }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
     /* NAVBAR */
     .navbar {
-      width: 100%;
-      padding: 12px 20px;
-      backdrop-filter: blur(18px);
-      background: rgba(10, 15, 30, 0.85);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
       position: sticky;
       top: 0;
-      z-index: 999;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: linear-gradient(
+        to bottom,
+        rgba(15, 23, 42, 0.96),
+        rgba(15, 23, 42, 0.86),
+        transparent
+      );
+      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
     }
 
-    .logo {
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px 14px 8px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo-wrap {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-weight: 800;
-      font-size: 18px;
     }
 
     .logo-mark {
       width: 34px;
       height: 34px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 10%, #22d3ee, #0f172a);
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #22d3ee, #0ea5e9);
-      color: #fff;
       font-weight: 800;
-      box-shadow: 0 0 18px #22d3ee99;
+      font-size: 18px;
+      box-shadow: 0 0 35px rgba(56, 189, 248, 0.8);
+    }
+
+    .logo-text {
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      font-size: 18px;
+    }
+
+    .logo-text span {
+      color: var(--accent-soft);
     }
 
     .nav-links {
       display: flex;
-      align-items: center;
-      gap: 18px;
-      font-size: 14px;
+      gap: 16px;
+      margin-left: 16px;
+      font-size: 13px;
+      color: var(--text-muted);
     }
 
     .nav-links a {
-      padding: 6px 10px;
+      padding: 5px 10px;
       border-radius: 999px;
-      color: var(--text-muted);
-      transition: 0.2s;
+      transition: background 0.18s, color 0.18s, transform 0.18s;
     }
 
     .nav-links a:hover,
     .nav-links a.active {
-      background: rgba(255,255,255,0.08);
-      color: #fff;
-    }
-
-    .avatar {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #6366f1, #22d3ee);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: bold;
-      color: white;
-    }
-
-    /* PAGE LAYOUT */
-    .page {
-      max-width: 1150px;
-      margin: 22px auto 40px;
-      padding: 0 16px;
-    }
-
-    .back-link {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 14px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .back-link span {
-      font-size: 18px;
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-main);
       transform: translateY(-1px);
     }
 
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
-      gap: 20px;
-      align-items: stretch;
-    }
-
-    /* POSTER BOX */
-    .poster-wrap {
-      background: radial-gradient(circle at top, #0f172a, #020617);
-      border-radius: 18px;
-      padding: 10px;
-      border: 1px solid #1f2937;
-      box-shadow: 0 20px 45px rgba(0,0,0,0.75);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .poster-img {
-      border-radius: 14px;
-      border: 1px solid rgba(148,163,184,.5);
-      background: linear-gradient(135deg,#0f172a,#020617);
-      height: 360px;
+    .nav-right {
+      margin-left: auto;
       display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 18px;
-      text-align: center;
-      font-size: 14px;
-      color: #e5e7eb;
+      gap: 10px;
     }
 
-    .poster-tag-row {
+    .search-box {
       display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .badge {
-      padding: 3px 8px;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
       border-radius: 999px;
-      background: rgba(15,23,42,0.9);
-      border: 1px solid rgba(148,163,184,0.6);
-      font-size: 10px;
-    }
-
-    /* DETAILS */
-    .details {
-      background: linear-gradient(135deg, #020617, #020617cc);
-      border-radius: 18px;
-      border: 1px solid #1f2937;
-      padding: 18px 16px 18px;
-      box-shadow: 0 22px 40px rgba(0,0,0,0.65);
-    }
-
-    .title-row {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-bottom: 6px;
-      flex-wrap: wrap;
-    }
-
-    .title {
-      font-size: 26px;
-      font-weight: 700;
-    }
-
-    .badge-age {
-      padding: 2px 8px;
-      border-radius: 6px;
-      border: 1px solid rgba(248,250,252,0.25);
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .meta {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 14px;
-    }
-
-    .rating-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
-      font-size: 13px;
-    }
-
-    .star {
-      color: var(--gold);
-      font-size: 16px;
-    }
-
-    .score {
-      font-weight: 600;
-      color: var(--gold);
-    }
-
-    .synopsis {
-      font-size: 14px;
-      line-height: 1.5;
-      color: #e5e7eb;
-      margin-bottom: 18px;
-    }
-
-    /* BUTTONS */
-    .btn-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    .btn-main {
-      padding: 10px 18px;
-      border-radius: 999px;
-      border: none;
-      background: linear-gradient(135deg,#22c55e,#16a34a);
-      color: #022c22;
-      font-weight: 600;
-      font-size: 14px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      box-shadow: 0 14px 30px rgba(22,163,74,0.7);
-    }
-
-    .btn-ghost {
-      padding: 9px 16px;
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.6);
-      background: transparent;
-      color: var(--text-main);
-      font-size: 13px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-    }
-
-    .btn-main span.icon,
-    .btn-ghost span.icon {
-      font-size: 14px;
-    }
-
-    /* EXTRA INFO */
-    .extra-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
-      gap: 10px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.35);
       font-size: 12px;
       color: var(--text-muted);
     }
 
-    .extra-card {
-      background: rgba(15,23,42,0.9);
-      border-radius: 12px;
-      border: 1px solid #1f2937;
-      padding: 10px 12px;
+    .search-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
     }
 
-    .extra-title {
+    .avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #6366f1, #22d3ee);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 0 18px rgba(129, 140, 248, 0.8);
+    }
+
+    /* PAGE */
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 18px 14px 40px;
+    }
+
+    .back-link {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 18px;
+      opacity: 0.9;
+    }
+
+    .back-link span {
+      font-size: 10px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.4fr);
+      gap: 22px;
+    }
+
+    .poster-card {
+      border-radius: 24px;
+      background: radial-gradient(circle at 20% 0%, #22d3ee33, transparent 60%),
+        radial-gradient(circle at 80% 100%, #22c55e33, transparent 60%),
+        linear-gradient(145deg, #020617, #030712);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      padding: 18px 18px 16px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 260px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .poster-tag {
       font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+      width: fit-content;
+      margin-bottom: 10px;
+    }
+
+    .movie-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #6b7280;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+    }
+
+    .movie-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .rating-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .poster-desc {
+      font-size: 13px;
+      color: #e5e7eb;
+      max-width: 480px;
+    }
+
+    .poster-fade {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 130% -10%, rgba(56, 189, 248, 0.3), transparent 45%);
+      opacity: 0.6;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .poster-buttons {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn-primary,
+    .btn-ghost {
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #22c55e, #06b6d4);
+      color: #020617;
+      box-shadow: 0 16px 35px rgba(34, 197, 94, 0.5);
+    }
+
+    .btn-ghost {
+      background: rgba(15, 23, 42, 0.96);
+      color: var(--text-main);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+    }
+
+    .btn-primary span.icon,
+    .btn-ghost span.icon {
+      font-size: 14px;
+    }
+
+    /* RIGHT SIDE */
+    .details {
+      border-radius: 20px;
+      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid rgba(31, 41, 55, 1);
+      padding: 16px 16px 14px;
+    }
+
+    .details-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .pill-label {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+    }
+
+    .section-heading {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-top: 6px;
+      margin-bottom: 8px;
+    }
+
+    .synopsis {
+      font-size: 13px;
+      line-height: 1.5;
+      color: #e5e7eb;
+    }
+
+    .tag-row {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 11px;
+    }
+
+    .chip {
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-muted);
+    }
+
+    /* MORE LIKE THIS */
+    .more-section {
+      margin-top: 26px;
+    }
+
+    .cards-row {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+    }
+
+    .small-card {
+      border-radius: 16px;
+      background: radial-gradient(circle at top, #111827 0, #020617 60%);
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      padding: 10px 10px 8px;
+      font-size: 11px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.9);
+    }
+
+    .small-title {
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    .small-meta {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    footer {
+      margin-top: 26px;
+      font-size: 10px;
+      color: var(--text-muted);
+      text-align: center;
+      opacity: 0.75;
     }
 
     @media (max-width: 900px) {
-      .hero {
+      .nav-links {
+        display: none;
+      }
+
+      .page {
+        padding-inline: 12px;
+      }
+
+      .layout {
         grid-template-columns: 1fr;
       }
-      .poster-img { height: 320px; }
+
+      .poster-card {
+        min-height: 230px;
+      }
     }
   </style>
 </head>
 <body>
-
   <!-- NAV -->
   <header class="navbar">
-    <div class="logo">
-      <div class="logo-mark">G</div>
-      GURU<span style="color: var(--accent-soft);">MOVIES</span>
+    <div class="nav-inner">
+      <div class="logo-wrap">
+        <div class="logo-mark">G</div>
+        <a href="index.html" class="logo-text">
+          GURU<span>MOVIES</span>
+        </a>
+      </div>
+
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="movies.html" class="active">Movies</a>
+        <a href="#">Series</a>
+        <a href="#">My List</a>
+      </nav>
+
+      <div class="nav-right">
+        <div class="search-box">
+          <div class="search-icon">⌕</div>
+          <span>Search</span>
+        </div>
+        <a href="login.html" class="avatar">G</a>
+      </div>
     </div>
-
-    <nav class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="movies.html">Movies</a>
-      <a href="#">Series</a>
-      <a href="#">My List</a>
-    </nav>
-
-    <a href="login.html" class="avatar">G</a>
   </header>
 
-  <!-- PAGE -->
   <main class="page">
-
     <a href="movies.html" class="back-link">
       <span>←</span> Back to Movies
     </a>
 
-    <section class="hero">
-      <!-- POSTER -->
-      <div class="poster-wrap">
-        <div class="poster-img">
-          <div>
-            <div style="font-size:12px; letter-spacing:0.15em; text-transform:uppercase; color:#9ca3af; margin-bottom:6px;">
-              GuruMovies Original
-            </div>
-            <div style="font-size:20px; font-weight:700; margin-bottom:4px;">
-              CITY OF FIRE
-            </div>
-            <div style="font-size:13px; color:#e5e7eb;">
-              Neon-soaked gangster poster – Mumbai skyline, rain, and one boy on a bike,
-              heading straight into the underworld.
-            </div>
+    <section class="layout">
+      <!-- LEFT: POSTER / HERO -->
+      <article class="poster-card">
+        <div class="poster-fade"></div>
+
+        <div>
+          <div class="poster-tag">New · HD · Marathi + Hindi</div>
+          <h1 class="movie-title">City Of Fire</h1>
+          <p class="movie-meta">
+            2025 · 2h 05m · Action · Gangster · Mumbai &amp; Pune
+          </p>
+          <div class="rating-pill">
+            ★ 9.2
+            <span style="color: var(--text-muted);">· Guru rating</span>
           </div>
+          <p class="poster-desc">
+            Small-town boy enters Mumbai underworld. Full attitude, full action –
+            one wrong deal and the entire city starts burning. Power, loyalty and
+            revenge in a high-voltage gangster saga.
+          </p>
         </div>
 
-        <div class="poster-tag-row">
-          <span class="badge">New · HD</span>
-          <span class="badge">Gangster · Marathi + Hindi</span>
+        <div class="poster-buttons">
+          <a href="#" class="btn-primary">
+            <span class="icon">▶</span>
+            <span>Play (Demo)</span>
+          </a>
+          <a href="#" class="btn-ghost">
+            <span class="icon">⬇</span>
+            <span>Download (Coming soon)</span>
+          </a>
         </div>
-      </div>
+      </article>
 
-      <!-- DETAILS -->
-      <div class="details">
-        <div class="title-row">
-          <h1 class="title">City Of Fire</h1>
-          <span class="badge-age">UA 16+</span>
-        </div>
-
-        <div class="meta">
-          2025 · 2h 05m · Action · Gangster · Marathi + Hindi Dub
-        </div>
-
-        <div class="rating-row">
-          <span class="star">★</span>
-          <span class="score">9.2/10</span>
-          <span style="color:var(--text-muted);"> · IMDb style user score</span>
+      <!-- RIGHT: DETAILS -->
+      <aside class="details">
+        <div class="details-row">
+          <span class="pill-label">Audio: Marathi · Hindi</span>
+          <span class="pill-label">Subtitles: English</span>
+          <span class="pill-label">Quality: Full HD</span>
         </div>
 
+        <h2 class="section-heading">Synopsis</h2>
         <p class="synopsis">
-          A small-town boy from the outskirts of Pune enters Mumbai with one dream –
-          quick money. One favour for a local don pulls him into the underworld of power,
-          money and madness. Between loyalty and family, he must decide what burns:
-          the city, or his own conscience.
+          When a disciplined delivery boy from a chawl in Pune takes one risky job
+          in Mumbai, he gets pulled into a war between old-school dons and new-age
+          tech gangsters. As the city heats up, he must decide – stay loyal to his
+          people or burn everything for power.
         </p>
 
-        <div class="btn-row">
-          <button class="btn-main">
-            <span class="icon">▶</span>
-            Play Movie (demo)
-          </button>
-          <button class="btn-ghost">
-            <span class="icon">▢</span>
-            Watch Trailer
-          </button>
-          <button class="btn-ghost">
-            + Add to My List
-          </button>
+        <div class="tag-row">
+          <span class="chip">Gangster</span>
+          <span class="chip">Underworld</span>
+          <span class="chip">Mumbai · Pune</span>
+          <span class="chip">High action</span>
+          <span class="chip">Mass scenes</span>
+        </div>
+      </aside>
+    </section>
+
+    <!-- MORE LIKE THIS -->
+    <section class="more-section">
+      <h2 class="section-heading">More like this</h2>
+      <div class="cards-row">
+        <div class="small-card">
+          <div>Cop vs crime world – attitude loaded police drama.</div>
+          <div class="small-title">Rulebook Police</div>
+          <div class="small-meta">2024 · Drama · ★ 8.7</div>
         </div>
 
-        <div class="extra-grid">
-          <div class="extra-card">
-            <div class="extra-title">Cast</div>
-            <div>Guru A. Kale, Shruti S., Mahesh K., “Bhau” Patil</div>
-          </div>
-
-          <div class="extra-card">
-            <div class="extra-title">Directed by</div>
-            <div>Aditya “Gangster Cam” Jadhav</div>
-          </div>
-
-          <div class="extra-card">
-            <div class="extra-title">Audio · Subtitles</div>
-            <div>Marathi, Hindi · English subtitles</div>
-          </div>
-
-          <div class="extra-card">
-            <div class="extra-title">About</div>
-            <div>Perfect for late-night binge with headphones, dark theme and full attitude.</div>
-          </div>
+        <div class="small-card">
+          <div>IT job by day, hacker by night. One last exploit.</div>
+          <div class="small-title">Dark Terminal</div>
+          <div class="small-meta">2025 · Tech thriller · ★ 8.9</div>
         </div>
 
+        <div class="small-card">
+          <div>Village electrician plans insane city heist.</div>
+          <div class="small-title">Current Chori</div>
+          <div class="small-meta">2024 · Heist · ★ 9.0</div>
+        </div>
       </div>
     </section>
 
+    <footer>
+      GuruMovies · City Of Fire – UI demo only (no real streaming / download).
+    </footer>
   </main>
 </body>
 </html>
