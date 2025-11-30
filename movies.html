@@ -346,6 +346,48 @@
       }
     }
   </style>
+  .poster {
+  position: relative;
+  width: 100%;
+  padding-top: 150%; /* poster उंची */
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+
+/* img साठी नवीन class */
+.poster-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* वर छोटा लेबल व rating साठी */
+.poster-chip {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9);
+  font-size: 9px;
+  border: 1px solid rgba(148, 163, 184, 0.8);
+}
+
+.poster-rating {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.95);
+  font-size: 10px;
+  color: #fbbf24;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
 </head>
 <body>
   <!-- NAVBAR -->
@@ -408,126 +450,40 @@
     <!-- MOVIE GRID (CLICKABLE CARDS) -->
     <section class="grid">
 
-      <!-- City Of Fire -->
-      <a href="city-of-fire.html">
-      <a href="city-of-fire.html" style="text-decoration:none; color:inherit;">
+      <section class="grid">
+
+<article class="card">
+    <div class="poster">
+        <div class="poster-chip">Marathi + Hindi</div>
+        <img src="posters/city-of-fire.jpg" class="poster-img">
+        <div class="poster-rating">⭐ 9.2</div>
+    </div>
+
+    <div class="body">
+        <div class="title">City Of Fire</div>
+        <div class="meta-row">
+            <span>2025 · 2h 05m</span>
+            <span class="tag">Action</span>
+        </div>
+    </div>
+</article>
+
+  <!-- RULEBOOK POLICE -->
   <article class="card">
     <div class="poster">
-      <div class="poster-inner">
-        Gangster saga in Mumbai & Pune – full attitude, full action.
-      </div>
-      <span class="poster-chip">Marathi + Hindi</span>
-      <span class="poster-rating">★ 9.2</span>
+      <img src="posters/rulebook-police.jpg" class="poster-img">
     </div>
+
     <div class="body">
-      <div class="title">City Of Fire</div>
+      <div class="title">Rulebook Police</div>
       <div class="meta-row">
-        <span>2025 · 2h 05m</span>
-        <span class="tag">Action</span>
+        <span>2024 · 1h 54m</span>
+        <span class="tag">Drama</span>
       </div>
     </div>
   </article>
-      </a>
 
-      <!-- Rulebook Police -->
-      <a href="rulebook-police.html">
-        <article class="card">
-          <div class="poster">
-            <div class="poster-inner">
-              Cop vs crime world – full attitude. Rules, revenge & real streets.
-            </div>
-            <span class="poster-chip">Drama</span>
-            <span class="poster-rating">★ 8.7</span>
-          </div>
-          <div class="body">
-            <div class="title">Rulebook Police</div>
-            <div class="meta-row">
-              <span>2024 · 1h 54m</span>
-              <span class="tag">Drama</span>
-            </div>
-          </div>
-        </article>
-      </a>
-
-      <!-- Dark Terminal -->
-      <a href="dark-terminal.html">
-        <article class="card">
-          <div class="poster">
-            <div class="poster-inner">
-              IT job by day, hacker by night. One last password from truth.
-            </div>
-            <span class="poster-chip">Dual Audio</span>
-            <span class="poster-rating">★ 8.9</span>
-          </div>
-          <div class="body">
-            <div class="title">Dark Terminal</div>
-            <div class="meta-row">
-              <span>2025 · 2h 10m</span>
-              <span class="tag">Tech Thriller</span>
-            </div>
-          </div>
-        </article>
-      </a>
-
-      <!-- Billing Counter Love -->
-      <a href="billing-counter-love.html">
-        <article class="card">
-          <div class="poster">
-            <div class="poster-inner">
-              Love story starting in a D-Mart queue & ending in destiny.
-            </div>
-            <span class="poster-chip">HD</span>
-            <span class="poster-rating">★ 8.1</span>
-          </div>
-          <div class="body">
-            <div class="title">Billing Counter Love</div>
-            <div class="meta-row">
-              <span>2023 · 1h 48m</span>
-              <span class="tag">Romance</span>
-            </div>
-          </div>
-        </article>
-      </a>
-
-      <!-- Current Chori -->
-      <a href="current-chori.html">
-        <article class="card">
-          <div class="poster">
-            <div class="poster-inner">
-              Village electrician · Big scam · One insane heist.
-            </div>
-            <span class="poster-chip">Guru Pick</span>
-            <span class="poster-rating">★ 9.0</span>
-          </div>
-          <div class="body">
-            <div class="title">Current Chori</div>
-            <div class="meta-row">
-              <span>2024 · 2h 01m</span>
-              <span class="tag">Heist</span>
-            </div>
-          </div>
-        </article>
-      </a>
-
-      <!-- Crash Lobby -->
-      <a href="crash-lobby.html">
-        <article class="card">
-          <div class="poster">
-            <div class="poster-inner">
-              Banker by day, gamer by night. Real money, real danger.
-            </div>
-            <span class="poster-chip">Full HD</span>
-            <span class="poster-rating">★ 8.5</span>
-          </div>
-          <div class="body">
-            <div class="title">Crash Lobby</div>
-            <div class="meta-row">
-              <span>2023 · 1h 59m</span>
-              <span class="tag">Crime</span>
-            </div>
-          </div>
-        </article>
-      </a>
+      </section>
 
     </section>
 
