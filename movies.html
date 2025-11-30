@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>All Movies – GuruMovies</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
     :root {
       --bg-main: #050816;
@@ -40,11 +41,10 @@
     .page {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 14px 12px 50px;
+      padding: 16px 12px 50px;
     }
 
-    /* ───── NAVBAR ───── */
-
+    /* NAVBAR */
     .navbar {
       position: sticky;
       top: 0;
@@ -52,8 +52,8 @@
       backdrop-filter: blur(18px);
       background: linear-gradient(
         to bottom,
-        rgba(15, 23, 42, 0.96),
-        rgba(15, 23, 42, 0.82),
+        rgba(15, 23, 42, 0.98),
+        rgba(15, 23, 42, 0.86),
         transparent
       );
       border-bottom: 1px solid rgba(148, 163, 184, 0.12);
@@ -161,8 +161,7 @@
       box-shadow: 0 0 18px rgba(129, 140, 248, 0.8);
     }
 
-    /* ───── HEADER TEXT + FILTERS ───── */
-
+    /* HEADER */
     .header-row {
       margin-top: 18px;
       display: flex;
@@ -173,7 +172,7 @@
     }
 
     .heading-main {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 700;
       margin-bottom: 2px;
     }
@@ -198,6 +197,7 @@
       background: rgba(15, 23, 42, 0.9);
     }
 
+    /* FILTER CHIPS */
     .filters {
       margin-top: 18px;
       display: flex;
@@ -212,26 +212,25 @@
       background: rgba(15, 23, 42, 0.9);
       border: 1px solid rgba(55, 65, 81, 1);
       color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.18s, border-color 0.18s, color 0.18s,
+        transform 0.18s;
     }
 
     .chip.active {
       border-color: var(--accent-strong);
       color: #bbf7d0;
       background: rgba(22, 163, 74, 0.16);
+      transform: translateY(-1px);
     }
 
-    .chip span {
-      font-size: 10px;
-      opacity: 0.8;
-    }
-
-    /* ───── GRID + CARDS ───── */
-
+    /* GRID & CARD */
     .grid {
-      margin-top: 16px;
+      margin-top: 18px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
     }
 
     .card {
@@ -252,8 +251,6 @@
       border-color: rgba(56, 189, 248, 0.9);
     }
 
-    /* POSTER: इथे नंतर खरं image येईल */
-
     .poster {
       position: relative;
       width: 100%;
@@ -267,7 +264,19 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      background: radial-gradient(circle at top, #1f2937, #020617); /* जर image नसेल तर */
+    }
+
+    .poster-fallback {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, #0f172a, #020617);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      font-size: 11px;
+      text-align: center;
+      color: #e5e7eb;
     }
 
     .poster-chip {
@@ -296,13 +305,13 @@
     }
 
     .body {
-      padding: 8px 9px 10px;
+      padding: 7px 8px 9px;
       font-size: 11px;
     }
 
     .title {
       font-weight: 600;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -369,7 +378,7 @@
     </div>
   </header>
 
-  <!-- PAGE CONTENT -->
+  <!-- PAGE -->
   <main class="page">
     <div class="header-row">
       <div>
@@ -384,165 +393,153 @@
       </div>
     </div>
 
+    <!-- FILTERS -->
     <div class="filters">
-      <div class="chip active">All</div>
-      <div class="chip">Popular <span>· 8</span></div>
-      <div class="chip">Trending <span>· 5</span></div>
-      <div class="chip">HD</div>
-      <div class="chip">Marathi</div>
-      <div class="chip">Hindi</div>
-      <div class="chip">South Dub</div>
-      <div class="chip">Action</div>
-      <div class="chip">Drama</div>
-      <div class="chip">Romance</div>
-      <div class="chip">Crime</div>
+      <div class="chip active" data-filter="all">All</div>
+      <div class="chip" data-filter="popular">Popular</div>
+      <div class="chip" data-filter="trending">Trending</div>
+      <div class="chip" data-filter="hd">HD (7.0+)</div>
+      <div class="chip" data-filter="marathi">Marathi</div>
+      <div class="chip" data-filter="hindi">Hindi</div>
+      <div class="chip" data-filter="south">South Dub</div>
+      <div class="chip" data-filter="action">Action</div>
+      <div class="chip" data-filter="drama">Drama</div>
+      <div class="chip" data-filter="romance">Romance</div>
+      <div class="chip" data-filter="crime">Crime</div>
     </div>
 
     <!-- MOVIE GRID -->
     <section class="grid">
-      <!-- 1: City Of Fire -->
-      <article class="card">
-        <div class="poster">
-          <!-- नंतर तू इथे posters/city-of-fire.jpg upload केल्यावर image दिसेल -->
-          <img src="posters/city-of-fire.jpg" alt="City Of Fire" class="poster-img" />
-          <span class="poster-chip">Marathi + Hindi</span>
-          <span class="poster-rating">★ 9.2</span>
-        </div>
-        <div class="body">
-          <div class="title">City Of Fire</div>
-          <div class="meta-row">
-            <span>2025 · 2h 05m</span>
-            <span class="tag">Action</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- 2: Rulebook Police -->
-      <article class="card">
-        <div class="poster">
-          <img src="posters/rulebook-police.jpg" alt="Rulebook Police" class="poster-img" />
-          <span class="poster-chip">Drama</span>
-          <span class="poster-rating">★ 8.7</span>
-        </div>
-        <div class="body">
-          <div class="title">Rulebook Police</div>
-          <div class="meta-row">
-            <span>2024 · 1h 54m</span>
-            <span class="tag">Drama</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- 3: Dark Terminal -->
-      <article class="card">
-        <div class="poster">
-          <img src="posters/dark-terminal.jpg" alt="Dark Terminal" class="poster-img" />
-          <span class="poster-chip">Dual Audio</span>
-          <span class="poster-rating">★ 8.9</span>
-        </div>
-        <div class="body">
-          <div class="title">Dark Terminal</div>
-          <div class="meta-row">
-            <span>2025 · 2h 10m</span>
-            <span class="tag">Tech Thriller</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- 4: Billing Counter Love -->
-      <article class="card">
-        <div class="poster">
-          <img src="posters/billing-counter-love.jpg" alt="Billing Counter Love" class="poster-img" />
-          <span class="poster-chip">HD</span>
-          <span class="poster-rating">★ 8.1</span>
-        </div>
-        <div class="body">
-          <div class="title">Billing Counter Love</div>
-          <div class="meta-row">
-            <span>2023 · 1h 48m</span>
-            <span class="tag">Romance</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- 5: Current Chori -->
-      <article class="card">
-        <div class="poster">
-          <img src="posters/current-chori.jpg" alt="Current Chori" class="poster-img" />
-          <span class="poster-chip">Guru pick</span>
-          <span class="poster-rating">★ 9.0</span>
-        </div>
-        <div class="body">
-          <div class="title">Current Chori</div>
-          <div class="meta-row">
-            <span>2024 · 2h 01m</span>
-            <span class="tag">Heist</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- 6: Crash Lobby -->
-      <article class="card">
-        <div class="poster">
-          <img src="posters/crash-lobby.jpg" alt="Crash Lobby" class="poster-img" />
-          <span class="poster-chip">Full HD</span>
-          <span class="poster-rating">★ 8.5</span>
-        </div>
-        <div class="body">
-          <div class="title">Crash Lobby</div>
-          <div class="meta-row">
-            <span>2023 · 1h 59m</span>
-            <span class="tag">Crime</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- 7: Gaav to Metro -->
-      <article class="card">
-        <div class="poster">
-          <img src="posters/gaav-to-metro.jpg" alt="Gaav to Metro" class="poster-img" />
-          <span class="poster-chip">Original</span>
-          <span class="poster-rating">★ 9.4</span>
-        </div>
-        <div class="body">
-          <div class="title">Gaav to Metro</div>
-          <div class="meta-row">
-            <span>2025 · 2h 12m</span>
-            <span class="tag">Inspiring</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- 8: Puncture Yatra -->
-      <article class="card">
-        <div class="poster">
-          <img src="posters/puncture-yatra.jpg" alt="Puncture Yatra" class="poster-img" />
-          <span class="poster-chip">Comedy</span>
-          <span class="poster-rating">★ 8.3</span>
-        </div>
-        <div class="body">
-          <div class="title">Puncture Yatra</div>
-          <div class="meta-row">
-            <span>2022 · 1h 42m</span>
-            <span class="tag">Comedy</span>
-          </div>
-        </div>
-      </article>
+      <!-- JS ने भरेल -->
     </section>
 
     <footer>
-      GuruMovies · Movies page UI – demo content only.
+      GuruMovies · Movies page UI – TMDB API demo. Posters & data © TMDB.
     </footer>
   </main>
 
+  <!-- SCRIPT – TMDB API -->
   <script>
-    const chips = document.querySelectorAll('.chip');
-    chips.forEach(chip => {
-      chip.addEventListener('click', () => {
-        chips.forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
+    // ⚠️ टीप: हा API key public आहे, production साठी backend वापर.
+    const API_KEY = "1c23c182a195909bab8214c34cdf04ce";
+    const BASE = "https://api.themoviedb.org/3";
+
+    const grid = document.querySelector(".grid");
+    const filterChips = document.querySelectorAll(".chip");
+
+    function getUrl(filter) {
+      const baseDiscover = `${BASE}/discover/movie?api_key=${API_KEY}&sort_by=popularity.desc`;
+
+      if (filter === "popular")
+        return `${BASE}/movie/popular?api_key=${API_KEY}&language=en-IN&page=1`;
+
+      if (filter === "trending")
+        return `${BASE}/trending/movie/week?api_key=${API_KEY}&language=en-IN`;
+
+      if (filter === "hd")
+        return `${baseDiscover}&vote_average.gte=7&vote_count.gte=200`;
+
+      if (filter === "marathi")
+        return `${baseDiscover}&with_original_language=mr`;
+
+      if (filter === "hindi")
+        return `${baseDiscover}&with_original_language=hi`;
+
+      if (filter === "south")
+        return `${baseDiscover}&with_original_language=te`; // Telegu (just example)
+
+      if (filter === "action")
+        return `${baseDiscover}&with_genres=28`;
+
+      if (filter === "drama")
+        return `${baseDiscover}&with_genres=18`;
+
+      if (filter === "romance")
+        return `${baseDiscover}&with_genres=10749`;
+
+      if (filter === "crime")
+        return `${baseDiscover}&with_genres=80`;
+
+      // default: all
+      return baseDiscover;
+    }
+
+    function createCard(movie) {
+      const poster = movie.poster_path
+        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+        : null;
+
+      const title = movie.title || movie.name || "Untitled";
+      const year = movie.release_date
+        ? movie.release_date.substring(0, 4)
+        : "----";
+      const lang = (movie.original_language || "").toUpperCase();
+      const rating =
+        typeof movie.vote_average === "number"
+          ? movie.vote_average.toFixed(1)
+          : "–";
+
+      return `
+        <article class="card">
+          <div class="poster">
+            <div class="poster-chip">${lang || "MOVIE"}</div>
+            ${
+              poster
+                ? `<img src="${poster}" alt="${title} poster" class="poster-img" />`
+                : `<div class="poster-fallback">${title}</div>`
+            }
+            <div class="poster-rating">★ ${rating}</div>
+          </div>
+          <div class="body">
+            <div class="title">${title}</div>
+            <div class="meta-row">
+              <span>${year}</span>
+              <span class="tag">Movie</span>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    async function loadMovies(filter = "all") {
+      try {
+        grid.innerHTML =
+          "<p style='color:#9ca3af;font-size:13px;'>Loading movies…</p>";
+
+        const url = getUrl(filter);
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (!data.results || !data.results.length) {
+          grid.innerHTML =
+            "<p style='color:#9ca3af;font-size:13px;'>No movies found.</p>";
+          return;
+        }
+
+        grid.innerHTML = data.results
+          .slice(0, 20)
+          .map(createCard)
+          .join("");
+      } catch (err) {
+        console.error(err);
+        grid.innerHTML =
+          "<p style='color:red;font-size:13px;'>Error loading movies.</p>";
+      }
+    }
+
+    // filter click logic
+    filterChips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        filterChips.forEach((c) => c.classList.remove("active"));
+        chip.classList.add("active");
+
+        const type = chip.getAttribute("data-filter");
+        loadMovies(type);
       });
     });
+
+    // default load
+    loadMovies("all");
   </script>
 </body>
 </html>
