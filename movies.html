@@ -43,7 +43,8 @@
       padding: 14px 12px 50px;
     }
 
-    /* NAVBAR */
+    /* ───── NAVBAR ───── */
+
     .navbar {
       position: sticky;
       top: 0;
@@ -160,7 +161,8 @@
       box-shadow: 0 0 18px rgba(129, 140, 248, 0.8);
     }
 
-    /* HEADER */
+    /* ───── HEADER TEXT + FILTERS ───── */
+
     .header-row {
       margin-top: 18px;
       display: flex;
@@ -196,7 +198,6 @@
       background: rgba(15, 23, 42, 0.9);
     }
 
-    /* FILTER CHIPS */
     .filters {
       margin-top: 18px;
       display: flex;
@@ -224,18 +225,13 @@
       opacity: 0.8;
     }
 
-    /* GRID + CARDS */
+    /* ───── GRID + CARDS ───── */
+
     .grid {
       margin-top: 16px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 12px;
-    }
-
-    .grid > a {
-      text-decoration: none;
-      color: inherit;
-      display: block;
+      grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+      gap: 14px;
     }
 
     .card {
@@ -256,24 +252,22 @@
       border-color: rgba(56, 189, 248, 0.9);
     }
 
+    /* POSTER: इथे नंतर खरं image येईल */
+
     .poster {
       position: relative;
       width: 100%;
-      padding-top: 145%;
+      padding-top: 150%; /* poster height ratio */
       overflow: hidden;
     }
 
-    .poster-inner {
+    .poster-img {
       position: absolute;
       inset: 0;
-      background: linear-gradient(145deg, #0f172a, #020617);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px;
-      font-size: 11px;
-      text-align: center;
-      color: #e5e7eb;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: radial-gradient(circle at top, #1f2937, #020617); /* जर image नसेल तर */
     }
 
     .poster-chip {
@@ -302,13 +296,13 @@
     }
 
     .body {
-      padding: 7px 8px 9px;
+      padding: 8px 9px 10px;
       font-size: 11px;
     }
 
     .title {
       font-weight: 600;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -346,48 +340,6 @@
       }
     }
   </style>
-  .poster {
-  position: relative;
-  width: 100%;
-  padding-top: 150%; /* poster उंची */
-  overflow: hidden;
-  border-radius: var(--radius-lg);
-}
-
-/* img साठी नवीन class */
-.poster-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* वर छोटा लेबल व rating साठी */
-.poster-chip {
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  padding: 2px 6px;
-  border-radius: 999px;
-  background: rgba(15, 23, 42, 0.9);
-  font-size: 9px;
-  border: 1px solid rgba(148, 163, 184, 0.8);
-}
-
-.poster-rating {
-  position: absolute;
-  bottom: 6px;
-  right: 6px;
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: rgba(15, 23, 42, 0.95);
-  font-size: 10px;
-  color: #fbbf24;
-  display: flex;
-  align-items: center;
-  gap: 3px;
-}
 </head>
 <body>
   <!-- NAVBAR -->
@@ -417,8 +369,8 @@
     </div>
   </header>
 
+  <!-- PAGE CONTENT -->
   <main class="page">
-    <!-- HEADER -->
     <div class="header-row">
       <div>
         <h1 class="heading-main">All Movies</h1>
@@ -432,11 +384,10 @@
       </div>
     </div>
 
-    <!-- FILTERS -->
     <div class="filters">
       <div class="chip active">All</div>
-      <div class="chip">Popular</div>
-      <div class="chip">Trending</div>
+      <div class="chip">Popular <span>· 8</span></div>
+      <div class="chip">Trending <span>· 5</span></div>
       <div class="chip">HD</div>
       <div class="chip">Marathi</div>
       <div class="chip">Hindi</div>
@@ -447,86 +398,141 @@
       <div class="chip">Crime</div>
     </div>
 
-    <!-- MOVIE GRID (CLICKABLE CARDS) -->
+    <!-- MOVIE GRID -->
     <section class="grid">
-
-      <section class="grid">
-
-<article class="card">
-    <div class="poster">
-        <div class="poster-chip">Marathi + Hindi</div>
-        <img src="posters/city-of-fire.jpg" class="poster-img">
-        <div class="poster-rating">⭐ 9.2</div>
-    </div>
-
-    <div class="body">
-        <div class="title">City Of Fire</div>
-        <div class="meta-row">
+      <!-- 1: City Of Fire -->
+      <article class="card">
+        <div class="poster">
+          <!-- नंतर तू इथे posters/city-of-fire.jpg upload केल्यावर image दिसेल -->
+          <img src="posters/city-of-fire.jpg" alt="City Of Fire" class="poster-img" />
+          <span class="poster-chip">Marathi + Hindi</span>
+          <span class="poster-rating">★ 9.2</span>
+        </div>
+        <div class="body">
+          <div class="title">City Of Fire</div>
+          <div class="meta-row">
             <span>2025 · 2h 05m</span>
             <span class="tag">Action</span>
+          </div>
         </div>
-    </div>
-</article>
+      </article>
 
-  <!-- RULEBOOK POLICE -->
-  <article class="card">
-    <div class="poster">
-      <img src="posters/rulebook-police.jpg" class="poster-img">
-    </div>
+      <!-- 2: Rulebook Police -->
+      <article class="card">
+        <div class="poster">
+          <img src="posters/rulebook-police.jpg" alt="Rulebook Police" class="poster-img" />
+          <span class="poster-chip">Drama</span>
+          <span class="poster-rating">★ 8.7</span>
+        </div>
+        <div class="body">
+          <div class="title">Rulebook Police</div>
+          <div class="meta-row">
+            <span>2024 · 1h 54m</span>
+            <span class="tag">Drama</span>
+          </div>
+        </div>
+      </article>
 
-    <div class="body">
-      <div class="title">Rulebook Police</div>
-      <div class="meta-row">
-        <span>2024 · 1h 54m</span>
-        <span class="tag">Drama</span>
-      </div>
-    </div>
-  </article>
+      <!-- 3: Dark Terminal -->
+      <article class="card">
+        <div class="poster">
+          <img src="posters/dark-terminal.jpg" alt="Dark Terminal" class="poster-img" />
+          <span class="poster-chip">Dual Audio</span>
+          <span class="poster-rating">★ 8.9</span>
+        </div>
+        <div class="body">
+          <div class="title">Dark Terminal</div>
+          <div class="meta-row">
+            <span>2025 · 2h 10m</span>
+            <span class="tag">Tech Thriller</span>
+          </div>
+        </div>
+      </article>
 
-      </section>
+      <!-- 4: Billing Counter Love -->
+      <article class="card">
+        <div class="poster">
+          <img src="posters/billing-counter-love.jpg" alt="Billing Counter Love" class="poster-img" />
+          <span class="poster-chip">HD</span>
+          <span class="poster-rating">★ 8.1</span>
+        </div>
+        <div class="body">
+          <div class="title">Billing Counter Love</div>
+          <div class="meta-row">
+            <span>2023 · 1h 48m</span>
+            <span class="tag">Romance</span>
+          </div>
+        </div>
+      </article>
 
+      <!-- 5: Current Chori -->
+      <article class="card">
+        <div class="poster">
+          <img src="posters/current-chori.jpg" alt="Current Chori" class="poster-img" />
+          <span class="poster-chip">Guru pick</span>
+          <span class="poster-rating">★ 9.0</span>
+        </div>
+        <div class="body">
+          <div class="title">Current Chori</div>
+          <div class="meta-row">
+            <span>2024 · 2h 01m</span>
+            <span class="tag">Heist</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 6: Crash Lobby -->
+      <article class="card">
+        <div class="poster">
+          <img src="posters/crash-lobby.jpg" alt="Crash Lobby" class="poster-img" />
+          <span class="poster-chip">Full HD</span>
+          <span class="poster-rating">★ 8.5</span>
+        </div>
+        <div class="body">
+          <div class="title">Crash Lobby</div>
+          <div class="meta-row">
+            <span>2023 · 1h 59m</span>
+            <span class="tag">Crime</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 7: Gaav to Metro -->
+      <article class="card">
+        <div class="poster">
+          <img src="posters/gaav-to-metro.jpg" alt="Gaav to Metro" class="poster-img" />
+          <span class="poster-chip">Original</span>
+          <span class="poster-rating">★ 9.4</span>
+        </div>
+        <div class="body">
+          <div class="title">Gaav to Metro</div>
+          <div class="meta-row">
+            <span>2025 · 2h 12m</span>
+            <span class="tag">Inspiring</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 8: Puncture Yatra -->
+      <article class="card">
+        <div class="poster">
+          <img src="posters/puncture-yatra.jpg" alt="Puncture Yatra" class="poster-img" />
+          <span class="poster-chip">Comedy</span>
+          <span class="poster-rating">★ 8.3</span>
+        </div>
+        <div class="body">
+          <div class="title">Puncture Yatra</div>
+          <div class="meta-row">
+            <span>2022 · 1h 42m</span>
+            <span class="tag">Comedy</span>
+          </div>
+        </div>
+      </article>
     </section>
 
     <footer>
       GuruMovies · Movies page UI – demo content only.
     </footer>
   </main>
-  <script>
-  // FILTER CLICK FUNCTION
-  const chips = document.querySelectorAll('.chip');
-  const cards = document.querySelectorAll('.card');
-
-  chips.forEach(chip => {
-    chip.addEventListener('click', () => {
-
-      // Remove active from all
-      chips.forEach(c => c.classList.remove('active'));
-
-      // Add active to clicked
-      chip.classList.add('active');
-
-      let filter = chip.textContent.trim();
-
-      // Show all
-      if (filter === "All") {
-        cards.forEach(card => {
-          card.style.display = "block";
-        });
-        return;
-      }
-
-      // Filter items
-      cards.forEach(card => {
-        let genre = card.getAttribute('data-genre');
-        if (genre.includes(filter)) {
-          card.style.display = "block";
-        } else {
-          card.style.display = "none";
-        }
-      });
-
-    });
-  });
-  </script>
 </body>
 </html>
