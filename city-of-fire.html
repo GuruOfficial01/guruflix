@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>City Of Fire – GuruMovies</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --bg-main: #050816;
+      --bg-card: #020617;
+      --accent: #06b6d4;
+      --accent-soft: #0ea5e9;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --gold: #fbbf24;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, Arial;
+      background: radial-gradient(circle at top, #111827 0%, #050816 65%);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* NAVBAR */
+    .navbar {
+      width: 100%;
+      padding: 12px 20px;
+      backdrop-filter: blur(18px);
+      background: rgba(10, 15, 30, 0.85);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 18px;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #22d3ee, #0ea5e9);
+      color: #fff;
+      font-weight: 800;
+      box-shadow: 0 0 18px #22d3ee99;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 14px;
+    }
+
+    .nav-links a {
+      padding: 6px 10px;
+      border-radius: 999px;
+      color: var(--text-muted);
+      transition: 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+
+    .avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #22d3ee);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      color: white;
+    }
+
+    /* PAGE LAYOUT */
+    .page {
+      max-width: 1150px;
+      margin: 22px auto 40px;
+      padding: 0 16px;
+    }
+
+    .back-link {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .back-link span {
+      font-size: 18px;
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    /* POSTER BOX */
+    .poster-wrap {
+      background: radial-gradient(circle at top, #0f172a, #020617);
+      border-radius: 18px;
+      padding: 10px;
+      border: 1px solid #1f2937;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.75);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .poster-img {
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,.5);
+      background: linear-gradient(135deg,#0f172a,#020617);
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      text-align: center;
+      font-size: 14px;
+      color: #e5e7eb;
+    }
+
+    .poster-tag-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .badge {
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.6);
+      font-size: 10px;
+    }
+
+    /* DETAILS */
+    .details {
+      background: linear-gradient(135deg, #020617, #020617cc);
+      border-radius: 18px;
+      border: 1px solid #1f2937;
+      padding: 18px 16px 18px;
+      box-shadow: 0 22px 40px rgba(0,0,0,0.65);
+    }
+
+    .title-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+
+    .title {
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .badge-age {
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(248,250,252,0.25);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      font-size: 13px;
+    }
+
+    .star {
+      color: var(--gold);
+      font-size: 16px;
+    }
+
+    .score {
+      font-weight: 600;
+      color: var(--gold);
+    }
+
+    .synopsis {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #e5e7eb;
+      margin-bottom: 18px;
+    }
+
+    /* BUTTONS */
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .btn-main {
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg,#22c55e,#16a34a);
+      color: #022c22;
+      font-weight: 600;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 14px 30px rgba(22,163,74,0.7);
+    }
+
+    .btn-ghost {
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: transparent;
+      color: var(--text-main);
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .btn-main span.icon,
+    .btn-ghost span.icon {
+      font-size: 14px;
+    }
+
+    /* EXTRA INFO */
+    .extra-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .extra-card {
+      background: rgba(15,23,42,0.9);
+      border-radius: 12px;
+      border: 1px solid #1f2937;
+      padding: 10px 12px;
+    }
+
+    .extra-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .poster-img { height: 320px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="navbar">
+    <div class="logo">
+      <div class="logo-mark">G</div>
+      GURU<span style="color: var(--accent-soft);">MOVIES</span>
+    </div>
+
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="movies.html">Movies</a>
+      <a href="#">Series</a>
+      <a href="#">My List</a>
+    </nav>
+
+    <a href="login.html" class="avatar">G</a>
+  </header>
+
+  <!-- PAGE -->
+  <main class="page">
+
+    <a href="movies.html" class="back-link">
+      <span>←</span> Back to Movies
+    </a>
+
+    <section class="hero">
+      <!-- POSTER -->
+      <div class="poster-wrap">
+        <div class="poster-img">
+          <div>
+            <div style="font-size:12px; letter-spacing:0.15em; text-transform:uppercase; color:#9ca3af; margin-bottom:6px;">
+              GuruMovies Original
+            </div>
+            <div style="font-size:20px; font-weight:700; margin-bottom:4px;">
+              CITY OF FIRE
+            </div>
+            <div style="font-size:13px; color:#e5e7eb;">
+              Neon-soaked gangster poster – Mumbai skyline, rain, and one boy on a bike,
+              heading straight into the underworld.
+            </div>
+          </div>
+        </div>
+
+        <div class="poster-tag-row">
+          <span class="badge">New · HD</span>
+          <span class="badge">Gangster · Marathi + Hindi</span>
+        </div>
+      </div>
+
+      <!-- DETAILS -->
+      <div class="details">
+        <div class="title-row">
+          <h1 class="title">City Of Fire</h1>
+          <span class="badge-age">UA 16+</span>
+        </div>
+
+        <div class="meta">
+          2025 · 2h 05m · Action · Gangster · Marathi + Hindi Dub
+        </div>
+
+        <div class="rating-row">
+          <span class="star">★</span>
+          <span class="score">9.2/10</span>
+          <span style="color:var(--text-muted);"> · IMDb style user score</span>
+        </div>
+
+        <p class="synopsis">
+          A small-town boy from the outskirts of Pune enters Mumbai with one dream –
+          quick money. One favour for a local don pulls him into the underworld of power,
+          money and madness. Between loyalty and family, he must decide what burns:
+          the city, or his own conscience.
+        </p>
+
+        <div class="btn-row">
+          <button class="btn-main">
+            <span class="icon">▶</span>
+            Play Movie (demo)
+          </button>
+          <button class="btn-ghost">
+            <span class="icon">▢</span>
+            Watch Trailer
+          </button>
+          <button class="btn-ghost">
+            + Add to My List
+          </button>
+        </div>
+
+        <div class="extra-grid">
+          <div class="extra-card">
+            <div class="extra-title">Cast</div>
+            <div>Guru A. Kale, Shruti S., Mahesh K., “Bhau” Patil</div>
+          </div>
+
+          <div class="extra-card">
+            <div class="extra-title">Directed by</div>
+            <div>Aditya “Gangster Cam” Jadhav</div>
+          </div>
+
+          <div class="extra-card">
+            <div class="extra-title">Audio · Subtitles</div>
+            <div>Marathi, Hindi · English subtitles</div>
+          </div>
+
+          <div class="extra-card">
+            <div class="extra-title">About</div>
+            <div>Perfect for late-night binge with headphones, dark theme and full attitude.</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>
