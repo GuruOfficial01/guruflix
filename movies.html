@@ -2,544 +2,277 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>All Movies – GuruMovies</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GuruMovies – All Movies</title>
 
   <style>
     :root {
-      --bg-main: #050816;
-      --card-bg: #020617;
-      --accent: #06b6d4;
-      --accent-strong: #22c55e;
+      --bg-main: #030712;
+      --nav-bg: #020617;
+      --accent: #22c55e;
+      --accent-soft: #0ea5e9;
       --text-main: #f9fafb;
       --text-muted: #9ca3af;
-      --border-subtle: rgba(148, 163, 184, 0.35);
-      --radius-lg: 18px;
-      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.7);
+      --card-bg: #020617;
+      --chip-bg: #0f172a;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    *{margin:0;padding:0;box-sizing:border-box;}
 
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      min-height: 100vh;
-      background: radial-gradient(circle at top, #111827 0, #020617 45%, #000 100%);
+      background: radial-gradient(circle at top, #0b1120 0, #020617 40%, #000 100%);
       color: var(--text-main);
-      overflow-x: hidden;
+      font-family: system-ui, sans-serif;
+      min-height: 100vh;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .page {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 16px 12px 50px;
-    }
+    a { color: inherit; text-decoration: none; }
 
     /* NAVBAR */
-    .navbar {
+    header {
       position: sticky;
       top: 0;
-      z-index: 50;
+      background: rgba(15,23,42,0.95);
       backdrop-filter: blur(18px);
-      background: linear-gradient(
-        to bottom,
-        rgba(15, 23, 42, 0.98),
-        rgba(15, 23, 42, 0.86),
-        transparent
-      );
-      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+      border-bottom: 1px solid rgba(148,163,184,0.3);
+      z-index: 20;
     }
 
     .nav-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 10px 12px 8px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
+      max-width: 1200px; margin:auto;
+      padding:10px 14px;
+      display:flex; align-items:center; gap:14px;
     }
 
-    .logo-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
+    .logo-wrap { display:flex; align-items:center; gap:8px; }
     .logo-mark {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 10%, #22d3ee, #0f172a);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 18px;
-      box-shadow: 0 0 35px rgba(56, 189, 248, 0.8);
+      width:32px;height:32px;border-radius:999px;
+      background: radial-gradient(circle,#22d3ee,#0f172a);
+      display:flex;align-items:center;justify-content:center;
+      font-size:18px;font-weight:800;
+      box-shadow:0 0 30px rgba(56,189,248,0.9);
     }
 
-    .logo-text {
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      font-size: 18px;
-    }
+    .logo-text { font-weight:800; letter-spacing:0.08em; }
+    .logo-text span { color:var(--accent-soft); }
 
-    .logo-text span {
-      color: var(--accent);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 14px;
-      margin-left: 12px;
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
+    .nav-links { display:flex; gap:14px; margin-left:16px; font-size:13px; color:var(--text-muted); }
     .nav-links a {
-      padding: 4px 8px;
-      border-radius: 999px;
-      transition: background 0.18s, color 0.18s, transform 0.18s;
+      padding:4px 10px; border-radius:999px; transition:0.18s;
+    }
+    .nav-links a.active {
+      background:rgba(56,189,248,0.16);
+      color:#e0f2fe;
+      border:1px solid rgba(56,189,248,0.8);
     }
 
-    .nav-links a.active,
-    .nav-links a:hover {
-      background: rgba(15, 23, 42, 0.9);
-      color: var(--text-main);
-      transform: translateY(-1px);
-    }
-
-    .nav-right {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .nav-right { margin-left:auto; display:flex; align-items:center; gap:10px; }
 
     .search-box {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      font-size: 12px;
-      color: var(--text-muted);
+      display:flex; align-items:center; gap:6px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(15,23,42,0.95);
+      border:1px solid rgba(148,163,184,0.4);
+      font-size:12px; color:var(--text-muted);
     }
 
-    .search-icon {
-      width: 16px;
-      height: 16px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
+    .search-box input {
+      background:transparent; border:none; outline:none; width:120px;
+      color:var(--text-main); font-size:12px;
     }
 
     .avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #6366f1, #22d3ee);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 14px;
-      box-shadow: 0 0 18px rgba(129, 140, 248, 0.8);
+      width:28px;height:28px;border-radius:999px;
+      background:linear-gradient(135deg,#6366f1,#22d3ee);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700; font-size:14px;
+      box-shadow:0 0 18px rgba(129,140,248,0.8);
     }
 
-    /* HEADER */
-    .header-row {
-      margin-top: 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
+    /* PAGE */
+    .page { max-width:1200px; margin:auto; padding:16px 14px 40px; }
 
-    .heading-main {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 2px;
-    }
+    .heading-main { font-size:22px; font-weight:700; margin-bottom:4px; }
+    .heading-sub { font-size:12px; color:var(--text-muted); }
 
-    .heading-sub {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .view-toggle {
-      font-size: 11px;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .view-pill {
-      padding: 3px 8px;
-      border-radius: 999px;
-      border: 1px solid var(--border-subtle);
-      background: rgba(15, 23, 42, 0.9);
-    }
-
-    /* FILTER CHIPS */
     .filters {
-      margin-top: 18px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      font-size: 11px;
+      margin-top:14px; display:flex; flex-wrap:wrap; gap:8px; font-size:12px;
     }
 
-    .chip {
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(55, 65, 81, 1);
-      color: var(--text-muted);
-      cursor: pointer;
-      user-select: none;
-      transition: background 0.18s, border-color 0.18s, color 0.18s,
-        transform 0.18s;
+    .filter-btn {
+      padding:6px 12px; border-radius:999px;
+      background:#0f172a; border:1px solid #374151;
+      color:#9ca3af; cursor:pointer; transition:0.18s;
+    }
+    .filter-btn.active {
+      background:#065f46; border-color:#22c55e; color:#bbf7d0;
     }
 
-    .chip.active {
-      border-color: var(--accent-strong);
-      color: #bbf7d0;
-      background: rgba(22, 163, 74, 0.16);
-      transform: translateY(-1px);
-    }
-
-    /* GRID & CARD */
     .grid {
-      margin-top: 18px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 12px;
+      margin-top:18px; display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(135px,1fr));
+      gap:14px;
     }
 
     .card {
-      background: radial-gradient(circle at top, #111827 0, #020617 60%);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      box-shadow: var(--shadow-soft);
-      cursor: pointer;
-      transition: transform 0.16s ease-out, box-shadow 0.16s ease-out,
-        border-color 0.16s;
-      position: relative;
+      background:#0f172a; border:1px solid #334155;
+      border-radius:14px; overflow:hidden; cursor:pointer;
+      transition:0.15s;
     }
-
     .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.9);
-      border-color: rgba(56, 189, 248, 0.9);
+      transform:translateY(-5px);
+      border-color:#38bdf8;
+      box-shadow:0 14px 30px rgba(0,0,0,0.6);
     }
 
-    .poster {
-      position: relative;
-      width: 100%;
-      padding-top: 150%; /* poster height ratio */
-      overflow: hidden;
-    }
-
-    .poster-img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .poster-fallback {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(145deg, #0f172a, #020617);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px;
-      font-size: 11px;
-      text-align: center;
-      color: #e5e7eb;
-    }
+    .poster-wrap { position:relative; width:100%; padding-top:150%; }
+    .poster-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
 
     .poster-chip {
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      padding: 2px 6px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      font-size: 9px;
-      border: 1px solid rgba(148, 163, 184, 0.8);
+      position:absolute; top:6px; left:6px;
+      background:#111; padding:2px 7px; border-radius:999px;
+      font-size:9px; border:1px solid #94a3b8;
     }
 
     .poster-rating {
-      position: absolute;
-      bottom: 6px;
-      right: 6px;
-      padding: 2px 7px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.95);
-      font-size: 10px;
-      color: #fbbf24;
-      display: flex;
-      align-items: center;
-      gap: 3px;
+      position:absolute; bottom:6px; right:6px;
+      background:#111; padding:2px 8px; border-radius:999px;
+      color:#fbbf24; font-size:10px; display:flex; gap:3px;
     }
 
-    .body {
-      padding: 7px 8px 9px;
-      font-size: 11px;
-    }
+    .card-body { padding:8px 9px; }
+    .title { font-size:12px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .meta-row { display:flex; justify-content:space-between; font-size:10px; color:#9ca3af; }
 
-    .title {
-      font-weight: 600;
-      margin-bottom: 3px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .meta-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var(--text-muted);
-      font-size: 10px;
-    }
-
-    .tag {
-      padding: 2px 6px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-    }
-
-    footer {
-      margin-top: 22px;
-      font-size: 10px;
-      color: var(--text-muted);
-      text-align: center;
-      opacity: 0.75;
-    }
-
-    @media (max-width: 900px) {
-      .nav-links {
-        display: none;
-      }
-      .page {
-        padding-inline: 10px;
-      }
-    }
   </style>
 </head>
+
 <body>
-  <!-- NAVBAR -->
-  <header class="navbar">
+  <header>
     <div class="nav-inner">
       <div class="logo-wrap">
         <div class="logo-mark">G</div>
-        <a href="index.html" class="logo-text">
-          GURU<span>MOVIES</span>
-        </a>
+        <a href="index.html" class="logo-text">GURU<span>MOVIES</span></a>
       </div>
 
       <nav class="nav-links">
         <a href="index.html">Home</a>
         <a href="movies.html" class="active">Movies</a>
         <a href="#">Series</a>
-        <a href="#">My List</a>
       </nav>
 
       <div class="nav-right">
         <div class="search-box">
-          <div class="search-icon">⌕</div>
-          <span>Search movies…</span>
+          🔍 <input id="searchInput" placeholder="Search..." />
         </div>
         <a href="login.html" class="avatar">G</a>
       </div>
     </div>
   </header>
 
-  <!-- PAGE -->
   <main class="page">
-    <div class="header-row">
-      <div>
-        <h1 class="heading-main">All Movies</h1>
-        <p class="heading-sub">
-          Popular picks from Marathi, Hindi, South Dub & Hollywood – GuruMovies OTT style.
-        </p>
-      </div>
-      <div class="view-toggle">
-        View:
-        <span class="view-pill">Grid</span>
-      </div>
-    </div>
+    <h1 class="heading-main">All Movies</h1>
+    <p class="heading-sub">Popular picks from Marathi, Hindi, South Dub & Hollywood – via TMDB API.</p>
 
     <!-- FILTERS -->
     <div class="filters">
-      <div class="chip active" data-filter="all">All</div>
-      <div class="chip" data-filter="popular">Popular</div>
-      <div class="chip" data-filter="trending">Trending</div>
-      <div class="chip" data-filter="hd">HD (7.0+)</div>
-      <div class="chip" data-filter="marathi">Marathi</div>
-      <div class="chip" data-filter="hindi">Hindi</div>
-      <div class="chip" data-filter="south">South Dub</div>
-      <div class="chip" data-filter="action">Action</div>
-      <div class="chip" data-filter="drama">Drama</div>
-      <div class="chip" data-filter="romance">Romance</div>
-      <div class="chip" data-filter="crime">Crime</div>
+      <div class="filter-btn active" data-filter="all">All</div>
+      <div class="filter-btn" data-filter="popular">Popular</div>
+      <div class="filter-btn" data-filter="trending">Trending</div>
+      <div class="filter-btn" data-filter="top_rated">HD (7+)</div>
+      <div class="filter-btn" data-filter="28">Action</div>
+      <div class="filter-btn" data-filter="18">Drama</div>
+      <div class="filter-btn" data-filter="10749">Romance</div>
+      <div class="filter-btn" data-filter="80">Crime</div>
     </div>
 
-    <!-- MOVIE GRID -->
-    <section class="grid">
-      <!-- JS ने भरेल -->
+    <!-- MOVIES -->
+    <section id="moviesGrid" class="grid">
+      <p style="font-size:12px;color:#9ca3af;">Loading movies…</p>
     </section>
-
-    <footer>
-      GuruMovies · Movies page UI – TMDB API demo. Posters & data © TMDB.
-    </footer>
   </main>
 
-  <!-- SCRIPT – TMDB API -->
-  <script>
-    // ⚠️ टीप: हा API key public आहे, production साठी backend वापर.
-    const API_KEY = "1c23c182a195909bab8214c34cdf04ce";
-    const BASE = "https://api.themoviedb.org/3";
+<script>
+  const API_KEY = "1c23c182a195909bab8214c34cdf04ce";
+  const BASE = "https://api.themoviedb.org/3/";
 
-    const grid = document.querySelector(".grid");
-    const filterChips = document.querySelectorAll(".chip");
+  const grid = document.getElementById("moviesGrid");
+  const filters = document.querySelectorAll(".filter-btn");
+  const searchInput = document.getElementById("searchInput");
 
-    function getUrl(filter) {
-      const baseDiscover = `${BASE}/discover/movie?api_key=${API_KEY}&sort_by=popularity.desc`;
+  function api(filter){
+    if(filter==="popular") return `${BASE}movie/popular?api_key=${API_KEY}`;
+    if(filter==="trending") return `${BASE}trending/movie/day?api_key=${API_KEY}`;
+    if(filter==="top_rated") return `${BASE}movie/top_rated?api_key=${API_KEY}`;
+    if(!isNaN(filter)) return `${BASE}discover/movie?api_key=${API_KEY}&with_genres=${filter}`;
+    return `${BASE}movie/now_playing?api_key=${API_KEY}`;
+  }
 
-      if (filter === "popular")
-        return `${BASE}/movie/popular?api_key=${API_KEY}&language=en-IN&page=1`;
+  function card(m){
+    const poster = m.poster_path
+      ? `https://image.tmdb.org/t/p/w500${m.poster_path}`
+      : "https://via.placeholder.com/300x450?text=No+Image";
 
-      if (filter === "trending")
-        return `${BASE}/trending/movie/week?api_key=${API_KEY}&language=en-IN`;
-
-      if (filter === "hd")
-        return `${baseDiscover}&vote_average.gte=7&vote_count.gte=200`;
-
-      if (filter === "marathi")
-        return `${baseDiscover}&with_original_language=mr`;
-
-      if (filter === "hindi")
-        return `${baseDiscover}&with_original_language=hi`;
-
-      if (filter === "south")
-        return `${baseDiscover}&with_original_language=te`; // Telegu (just example)
-
-      if (filter === "action")
-        return `${baseDiscover}&with_genres=28`;
-
-      if (filter === "drama")
-        return `${baseDiscover}&with_genres=18`;
-
-      if (filter === "romance")
-        return `${baseDiscover}&with_genres=10749`;
-
-      if (filter === "crime")
-        return `${baseDiscover}&with_genres=80`;
-
-      // default: all
-      return baseDiscover;
-    }
-
-    function createCard(movie) {
-      const poster = movie.poster_path
-        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-        : null;
-
-      const title = movie.title || movie.name || "Untitled";
-      const year = movie.release_date
-        ? movie.release_date.substring(0, 4)
-        : "----";
-      const lang = (movie.original_language || "").toUpperCase();
-      const rating =
-        typeof movie.vote_average === "number"
-          ? movie.vote_average.toFixed(1)
-          : "–";
-
-      return `
-        <article class="card">
-          <div class="poster">
-            <div class="poster-chip">${lang || "MOVIE"}</div>
-            ${
-              poster
-                ? `<img src="${poster}" alt="${title} poster" class="poster-img" />`
-                : `<div class="poster-fallback">${title}</div>`
-            }
-            <div class="poster-rating">★ ${rating}</div>
+    return `
+      <article class="card">
+        <div class="poster-wrap">
+          <span class="poster-chip">${m.original_language.toUpperCase()}</span>
+          <img src="${poster}" class="poster-img"/>
+          <span class="poster-rating">★ ${m.vote_average.toFixed(1)}</span>
+        </div>
+        <div class="card-body">
+          <div class="title">${m.title}</div>
+          <div class="meta-row">
+            <span>${m.release_date?.substring(0,4) || "----"}</span>
+            <span>Movie</span>
           </div>
-          <div class="body">
-            <div class="title">${title}</div>
-            <div class="meta-row">
-              <span>${year}</span>
-              <span class="tag">Movie</span>
-            </div>
-          </div>
-        </article>
-      `;
+        </div>
+      </article>`;
+  }
+
+  async function loadMovies(filter="all"){
+    grid.innerHTML = "<p style='font-size:12px;color:#9ca3af;'>Loading…</p>";
+
+    try{
+      const res = await fetch(api(filter));
+      const data = await res.json();
+
+      grid.innerHTML = data.results.slice(0,20).map(card).join("");
+    }catch(e){
+      console.log(e);
+      grid.innerHTML = "<p style='color:red;'>Error loading movies.</p>";
     }
+  }
 
-    async function loadMovies(filter = "all") {
-      try {
-        grid.innerHTML =
-          "<p style='color:#9ca3af;font-size:13px;'>Loading movies…</p>";
-
-        const url = getUrl(filter);
-        const res = await fetch(url);
-        const data = await res.json();
-
-        if (!data.results || !data.results.length) {
-          grid.innerHTML =
-            "<p style='color:#9ca3af;font-size:13px;'>No movies found.</p>";
-          return;
-        }
-
-        grid.innerHTML = data.results
-          .slice(0, 20)
-          .map(createCard)
-          .join("");
-      } catch (err) {
-        console.error(err);
-        grid.innerHTML =
-          "<p style='color:red;font-size:13px;'>Error loading movies.</p>";
-      }
-    }
-
-    // filter click logic
-    filterChips.forEach((chip) => {
-      chip.addEventListener("click", () => {
-        filterChips.forEach((c) => c.classList.remove("active"));
-        chip.classList.add("active");
-
-        const type = chip.getAttribute("data-filter");
-        loadMovies(type);
-      });
+  filters.forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      filters.forEach(x=>x.classList.remove("active"));
+      btn.classList.add("active");
+      loadMovies(btn.dataset.filter);
     });
+  });
 
-    // default load
-    loadMovies("all");
-  </script>
+  // SEARCH
+  let t;
+  searchInput.addEventListener("input",()=>{
+    clearTimeout(t);
+    const q = searchInput.value.trim();
+    if(q.length<2){
+      const active = document.querySelector(".filter-btn.active").dataset.filter;
+      t=setTimeout(()=>loadMovies(active),300);
+      return;
+    }
+    t=setTimeout(async()=>{
+      grid.innerHTML="<p style='color:#9ca3af;'>Searching…</p>";
+      const res = await fetch(`${BASE}search/movie?api_key=${API_KEY}&query=${q}`);
+      const data = await res.json();
+      grid.innerHTML = data.results.slice(0,20).map(card).join("");
+    },400);
+  });
+
+  loadMovies("all");
+</script>
+
 </body>
 </html>
