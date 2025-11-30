@@ -210,12 +210,17 @@
       overflow: hidden;
     }
 
-    .poster-img {
+    .poster-inner {
       position: absolute;
       inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      font-size: 11px;
+      text-align: center;
+      color: #e5e7eb;
     }
 
     .poster-chip {
@@ -313,7 +318,7 @@
   <main class="page">
     <h1 class="heading-main">All Movies</h1>
     <p class="heading-sub">
-      Popular picks from Marathi, Hindi, South Dub & Hollywood – GuruMovies – via TMDB API.
+      Popular picks from Marathi, Hindi, South Dub & Hollywood – GuruMovies OTT style.
     </p>
 
     <!-- FILTERS -->
@@ -336,10 +341,105 @@
   </main>
 
   <script>
-    // ---- TMDB CONFIG ----
-    const API_KEY = "1c23c182a195909bab8214c34cdf04ce"; // तुझी key
-    const BASE = "https://api.themoviedb.org/3";
-    const IMG_BASE = "https://image.tmdb.org/t/p/w500";
+    // Local movie data – इथे आपली demo movies आहेत
+    const MOVIES = [
+      {
+        id: 1,
+        title: "City Of Fire",
+        year: 2025,
+        runtime: "2h 05m",
+        rating: 9.2,
+        lang: "Marathi + Hindi",
+        genres: ["action", "crime"],
+        tags: ["popular", "trending", "hd"],
+        region: "south",
+        desc: "Gangster saga in Mumbai & Pune – full attitude, full action."
+      },
+      {
+        id: 2,
+        title: "Rulebook Police",
+        year: 2024,
+        runtime: "1h 54m",
+        rating: 8.7,
+        lang: "Marathi",
+        genres: ["drama"],
+        tags: ["popular", "hd"],
+        region: "marathi",
+        desc: "Cop vs crime world – full attitude. Rules, revenge & real streets."
+      },
+      {
+        id: 3,
+        title: "Dark Terminal",
+        year: 2025,
+        runtime: "2h 10m",
+        rating: 8.9,
+        lang: "Dual Audio",
+        genres: ["action", "drama"],
+        tags: ["trending", "hd"],
+        region: "hindi",
+        desc: "IT job by day, hacker by night. One last password from truth."
+      },
+      {
+        id: 4,
+        title: "Billing Counter Love",
+        year: 2023,
+        runtime: "1h 48m",
+        rating: 8.1,
+        lang: "Hindi",
+        genres: ["romance"],
+        tags: ["popular"],
+        region: "hindi",
+        desc: "Love story starting in a D-Mart queue and ending in destiny."
+      },
+      {
+        id: 5,
+        title: "Current Chori",
+        year: 2024,
+        runtime: "2h 01m",
+        rating: 9.0,
+        lang: "Marathi",
+        genres: ["crime"],
+        tags: ["trending", "hd"],
+        region: "marathi",
+        desc: "Village electrician. Big scam. One insane heist plan."
+      },
+      {
+        id: 6,
+        title: "Crash Lobby",
+        year: 2023,
+        runtime: "1h 59m",
+        rating: 8.5,
+        lang: "Hindi",
+        genres: ["crime", "drama"],
+        tags: ["popular"],
+        region: "hindi",
+        desc: "Banker by day, gamer by night. Real money, real danger."
+      },
+      {
+        id: 7,
+        title: "Gaav to Metro",
+        year: 2025,
+        runtime: "2h 12m",
+        rating: 9.4,
+        lang: "Marathi",
+        genres: ["drama"],
+        tags: ["trending", "hd"],
+        region: "marathi",
+        desc: "True story of a boy from Pandharpur chasing metro dreams."
+      },
+      {
+        id: 8,
+        title: "Puncture Yatra",
+        year: 2022,
+        runtime: "1h 42m",
+        rating: 8.3,
+        lang: "Marathi",
+        genres: ["comedy"],
+        tags: ["popular"],
+        region: "marathi",
+        desc: "Four friends, one broken bike, one crazy roadtrip."
+      }
+    ];
 
     const grid = document.getElementById("moviesGrid");
     const chips = document.querySelectorAll(".chip");
@@ -348,104 +448,64 @@
     let currentFilter = "all";
     let currentSearch = "";
 
-    function getUrl(filter, query) {
-      const params = new URLSearchParams({ api_key: API_KEY, language: "en-IN" });
-
-      // Search असेल तर search API use
-      if (query && query.trim().length > 0) {
-        params.set("query", query.trim());
-        params.set("include_adult", "false");
-        return `${BASE}/search/movie?${params.toString()}`;
-      }
-
-      switch (filter) {
-        case "popular":
-          return `${BASE}/movie/popular?${params.toString()}`;
-        case "trending":
-          return `${BASE}/trending/movie/day?${params.toString()}`;
-        case "hd":
-          params.set("sort_by", "vote_average.desc");
-          params.set("vote_count.gte", "200");
-          params.set("vote_average.gte", "7");
-          return `${BASE}/discover/movie?${params.toString()}`;
-        case "action":
-          params.set("with_genres", "28");
-          return `${BASE}/discover/movie?${params.toString()}`;
-        case "drama":
-          params.set("with_genres", "18");
-          return `${BASE}/discover/movie?${params.toString()}`;
-        case "romance":
-          params.set("with_genres", "10749");
-          return `${BASE}/discover/movie?${params.toString()}`;
-        case "crime":
-          params.set("with_genres", "80");
-          return `${BASE}/discover/movie?${params.toString()}`;
-        case "marathi":
-          params.set("with_original_language", "mr");
-          return `${BASE}/discover/movie?${params.toString()}`;
-        case "hindi":
-          params.set("with_original_language", "hi");
-          return `${BASE}/discover/movie?${params.toString()}`;
-        case "south":
-          // roughly South languages
-          params.set("with_original_language", "te|ta|ml|kn");
-          return `${BASE}/discover/movie?${params.toString()}`;
-        case "all":
-        default:
-          params.set("sort_by", "popularity.desc");
-          return `${BASE}/discover/movie?${params.toString()}`;
-      }
+    function matchesFilter(movie) {
+      const f = currentFilter;
+      if (f === "all") return true;
+      if (f === "popular") return movie.tags.includes("popular");
+      if (f === "trending") return movie.tags.includes("trending");
+      if (f === "hd") return movie.rating >= 7.0;
+      if (f === "marathi") return movie.lang.toLowerCase().includes("marathi");
+      if (f === "hindi") return movie.lang.toLowerCase().includes("hindi");
+      if (f === "south") return movie.region === "south";
+      // genre filters
+      return movie.genres.includes(f);
     }
 
-    function createCard(movie) {
-      const poster = movie.poster_path
-        ? `${IMG_BASE}${movie.poster_path}`
-        : "https://via.placeholder.com/300x450/020617/9ca3af?text=No+Poster";
-
-      const lang = movie.original_language?.toUpperCase() || "N/A";
-      const rating = movie.vote_average ? movie.vote_average.toFixed(1) : "N/A";
-      const year = movie.release_date ? movie.release_date.substring(0, 4) : "----";
-
-      return `
-        <article class="card">
-          <div class="poster">
-            <img src="${poster}" alt="${movie.title}" class="poster-img" loading="lazy" />
-            <span class="poster-chip">${lang}</span>
-            <span class="poster-rating">★ ${rating}</span>
-          </div>
-          <div class="body">
-            <div class="title">${movie.title}</div>
-            <div class="meta-row">
-              <span>${year}</span>
-              <span class="tag">Movie</span>
-            </div>
-          </div>
-        </article>
-      `;
+    function matchesSearch(movie) {
+      if (!currentSearch) return true;
+      const q = currentSearch.toLowerCase();
+      return (
+        movie.title.toLowerCase().includes(q) ||
+        movie.desc.toLowerCase().includes(q) ||
+        movie.lang.toLowerCase().includes(q)
+      );
     }
 
-    async function loadMovies() {
-      const url = getUrl(currentFilter, currentSearch);
-      grid.innerHTML = `<div class="empty-state" style="color:#9ca3af;">Loading movies…</div>`;
+    function renderMovies() {
+      const filtered = MOVIES.filter(
+        m => matchesFilter(m) && matchesSearch(m)
+      );
 
-      try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        const data = await res.json();
-
-        const list = (data.results || []).slice(0, 20);
-        if (!list.length) {
-          grid.innerHTML =
-            `<div class="empty-state">No movies found for this filter/search.</div>`;
-          return;
-        }
-
-        grid.innerHTML = list.map(createCard).join("");
-      } catch (err) {
-        console.error(err);
+      if (!filtered.length) {
         grid.innerHTML =
-          `<div class="empty-state" style="color:#ef4444;">Error loading movies.</div>`;
+          '<div class="empty-state">No movies found for this filter/search.</div>';
+        return;
       }
+
+      grid.innerHTML = filtered
+        .map(m => {
+          const mainGenre =
+            m.genres.length > 0
+              ? m.genres[0].charAt(0).toUpperCase() + m.genres[0].slice(1)
+              : "Movie";
+          return `
+          <article class="card">
+            <div class="poster">
+              <div class="poster-inner">${m.desc}</div>
+              <span class="poster-chip">${m.lang}</span>
+              <span class="poster-rating">★ ${m.rating.toFixed(1)}</span>
+            </div>
+            <div class="body">
+              <div class="title">${m.title}</div>
+              <div class="meta-row">
+                <span>${m.year} · ${m.runtime}</span>
+                <span class="tag">${mainGenre}</span>
+              </div>
+            </div>
+          </article>
+        `;
+        })
+        .join("");
     }
 
     // Filter click
@@ -454,22 +514,22 @@
         chips.forEach(c => c.classList.remove("active"));
         chip.classList.add("active");
         currentFilter = chip.getAttribute("data-filter");
-        loadMovies();
+        renderMovies();
       });
     });
 
-    // Search (debounce)
+    // Search (थोडा delay – smooth feel)
     let searchTimer;
     searchInput.addEventListener("input", () => {
       clearTimeout(searchTimer);
       searchTimer = setTimeout(() => {
         currentSearch = searchInput.value.trim();
-        loadMovies();
-      }, 300);
+        renderMovies();
+      }, 250);
     });
 
-    // First load
-    loadMovies();
+    // First render
+    renderMovies();
   </script>
 </body>
 </html>
