@@ -535,5 +535,42 @@
       GuruMovies · Movies page UI – demo content only.
     </footer>
   </main>
+  <script>
+  // FILTER CLICK FUNCTION
+  const chips = document.querySelectorAll('.chip');
+  const cards = document.querySelectorAll('.card');
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+
+      // Remove active from all
+      chips.forEach(c => c.classList.remove('active'));
+
+      // Add active to clicked
+      chip.classList.add('active');
+
+      let filter = chip.textContent.trim();
+
+      // Show all
+      if (filter === "All") {
+        cards.forEach(card => {
+          card.style.display = "block";
+        });
+        return;
+      }
+
+      // Filter items
+      cards.forEach(card => {
+        let genre = card.getAttribute('data-genre');
+        if (genre.includes(filter)) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
+
+    });
+  });
+  </script>
 </body>
 </html>
