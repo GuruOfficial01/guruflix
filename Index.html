@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Guru Movies</title
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    }
+
+    body {
+      background: #050816;
+      color: #f5f5f5;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* Top Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      background: linear-gradient(90deg, #050816, #111827);
+      border-bottom: 1px solid #1f2933;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .logo-mark {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: radial-gradient(circle at 30% 0%, #22c55e, #0ea5e9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 14px;
+      font-size: 0.9rem;
+    }
+
+    .nav-links a {
+      padding: 4px 8px;
+      border-radius: 999px;
+      opacity: 0.85;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: rgba(148, 163, 184, 0.18);
+      opacity: 1;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      font-size: 0.8rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid #22c55e;
+      background: transparent;
+      color: #e5e7eb;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #22c55e, #0ea5e9);
+      border: none;
+      color: #020617;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Layout */
+    .layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: #020617;
+      border-radius: 16px;
+      padding: 14px 14px 18px;
+      border: 1px solid #111827;
+      max-height: calc(100vh - 80px);
+      overflow: auto;
+    }
+
+    .sidebar h3 {
+      font-size: 0.9rem;
+      margin: 14px 0 8px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chip {
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #020617;
+      border: 1px solid #1f2933;
+      opacity: 0.85;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .chip:hover,
+    .chip.active {
+      border-color: #22c55e;
+      opacity: 1;
+    }
+
+    .sidebar .link {
+      font-size: 0.8rem;
+      opacity: 0.9;
+      margin-top: 4px;
+      display: inline-block;
+    }
+
+    .sidebar .link:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+
+    /* Content */
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* Search section */
+    .search-box {
+      background: #020617;
+      border-radius: 16px;
+      padding: 10px 12px;
+      border: 1px solid #111827;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .search-input-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #020617;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      padding: 6px 10px;
+    }
+
+    .search-input-wrap span {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    .search-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #e5e7eb;
+      font-size: 0.85rem;
+    }
+
+    .search-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.75rem;
+    }
+
+    .tag-pill {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #020617;
+      border: 1px dashed #4b5563;
+      opacity: 0.8;
+    }
+
+    /* Section headers */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .section-header h2 {
+      font-size: 1rem;
+    }
+
+    .section-header p {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    .link-small {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    .link-small:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+
+    /* Cards grid */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      background: #020617;
+      border-radius: 14px;
+      border: 1px solid #111827;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease,
+        border-color 0.12s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.6);
+      border-color: #22c55e;
+    }
+
+    .card-poster {
+      background: radial-gradient(circle at 30% 0%, #22c55e, #0ea5e9);
+      height: 170px;
+      position: relative;
+    }
+
+    .card-badge {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      font-size: 0.7rem;
+      padding: 3px 6px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .card-body {
+      padding: 8px 9px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .card-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .card-meta {
+      font-size: 0.73rem;
+      display: flex;
+      justify-content: space-between;
+      opacity: 0.8;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .btn-xs {
+      flex: 1;
+      font-size: 0.75rem;
+      padding: 4px 6px;
+      border-radius: 999px;
+      border: 1px solid #1f2933;
+      background: #020617;
+      color: #e5e7eb;
+      cursor: pointer;
+    }
+
+    .btn-xs.primary {
+      border-color: #22c55e;
+      background: linear-gradient(135deg, #22c55e, #0ea5e9);
+      color: #020617;
+    }
+
+    /* Footer */
+    .footer {
+      padding: 18px 16px 28px;
+      border-top: 1px solid #111827;
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: #9ca3af;
+      background: #020617;
+    }
+
+    .footer-top {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-bottom: 10px;
+    }
+
+    .footer-col {
+      min-width: 150px;
+    }
+
+    .footer-col h4 {
+      font-size: 0.8rem;
+      margin-bottom: 6px;
+      color: #e5e7eb;
+    }
+
+    .footer-col a {
+      display: block;
+      font-size: 0.78rem;
+      opacity: 0.85;
+      margin-bottom: 4px;
+    }
+
+    .footer-col a:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+
+    .footer-bottom {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 8px;
+      border-top: 1px solid #111827;
+      padding-top: 8px;
+    }
+
+    .disclaimer {
+      font-size: 0.74rem;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">
+      <div class="logo-mark">G</div>
+      <span>GuruMovies</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#" class="active">Home</a>
+      <a href="#">Movies</a>
+      <a href="#">Series</a>
+      <a href="#">Drama</a>
+      <a href="#">Anime</a>
+      <a href="#">Sports</a>
+    </nav>
+    <div class="nav-right">
+      <button class="btn">Login</button>
+      <button class="btn btn-primary">Sign Up</button>
+    </div>
+  </header>
+
+  <!-- MAIN LAYOUT -->
+  <main class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <h3>Genres</h3>
+      <div class="chip-row">
+        <button class="chip active">Action</button>
+        <button class="chip">Comedy</button>
+        <button class="chip">Drama</button>
+        <button class="chip">Horror</button>
+        <button class="chip">Thriller</button>
+        <button class="chip">Romance</button>
+        <button class="chip">Sci-Fi</button>
+        <button class="chip">Fantasy</button>
+      </div>
+
+      <h3>Languages</h3>
+      <div class="chip-row">
+        <button class="chip">Hindi</button>
+        <button class="chip">English</button>
+        <button class="chip">Marathi</button>
+        <button class="chip">Tamil</button>
+        <button class="chip">Telugu</button>
+        <button class="chip">Malayalam</button>
+        <button class="chip">Kannada</button>
+        <button class="chip">Punjabi</button>
+      </div>
+
+      <h3>OTT Platforms</h3>
+      <div class="chip-row">
+        <button class="chip">Netflix</button>
+        <button class="chip">Prime Video</button>
+        <button class="chip">Hotstar</button>
+        <button class="chip">ZEE5</button>
+        <button class="chip">SonyLIV</button>
+        <button class="chip">JioCinema</button>
+      </div>
+
+      <h3>Quick Links</h3>
+      <a href="#" class="link">Request Content</a><br />
+      <a href="#" class="link">Community</a><br />
+      <a href="#" class="link">Contact Us</a><br />
+      <a href="#" class="link">DMCA</a>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <section class="content">
+      <!-- SEARCH -->
+      <section class="search-box">
+        <div class="search-input-wrap">
+          <span>🔍</span>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search movies, series, anime..."
+          />
+        </div>
+        <div class="search-tags">
+          <span style="opacity:0.7;">Trending:</span>
+          <span class="tag-pill">Avengers</span>
+          <span class="tag-pill">Spider-Man</span>
+          <span class="tag-pill">KGF</span>
+          <span class="tag-pill">Jailer</span>
+        </div>
+      </section>
+
+      <!-- WHAT'S NEW -->
+      <section>
+        <div class="section-header">
+          <div>
+            <h2>What's New</h2>
+            <p>Latest updates and trending content</p>
+          </div>
+        </div>
+
+        <div class="card-grid">
+          <!-- Card 1 -->
+          <article class="card">
+            <div class="card-poster">
+              <div class="card-badge">⭐ 8.5 • 2025 • 138m</div>
+            </div>
+            <div class="card-body">
+              <div class="card-title">KGF CHAPTER 2 !</div>
+              <div class="card-meta">
+                <span>Marathi • Drama</span>
+                <span>THEATER PRINT</span>
+              </div>
+              <div class="card-actions">
+                <button class="btn-xs primary">▶ Play</button>
+                <button class="btn-xs">More Info</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="card">
+            <div class="card-poster">
+              <div class="card-badge">⭐ 7.5 • 2025 • 129m</div>
+            </div>
+            <div class="card-body">
+              <div class="card-title">Devmanus</div>
+              <div class="card-meta">
+                <span>Marathi • Thriller</span>
+                <span>HD</span>
+              </div>
+              <div class="card-actions">
+                <button class="btn-xs primary">▶ Play</button>
+                <button class="btn-xs">More Info</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="card">
+            <div class="card-poster">
+              <div class="card-badge">⭐ 6.0 • 2025 • 2h</div>
+            </div>
+            <div class="card-body">
+              <div class="card-title">Andhar Maya</div>
+              <div class="card-meta">
+                <span>Series • Crime</span>
+                <span>HD</span>
+              </div>
+              <div class="card-actions">
+                <button class="btn-xs primary">▶ Play</button>
+                <button class="btn-xs">More Info</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 4 -->
+          <article class="card">
+            <div class="card-poster">
+              <div class="card-badge">⭐ 5.5 • 2024 • 156m</div>
+            </div>
+            <div class="card-body">
+              <div class="card-title">Guntur Kaaram</div>
+              <div class="card-meta">
+                <span>Telugu • Action</span>
+                <span>HD</span>
+              </div>
+              <div class="card-actions">
+                <button class="btn-xs primary">▶ Play</button>
+                <button class="btn-xs">More Info</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- LATEST MOVIES -->
+      <section>
+        <div class="section-header">
+          <h2>Latest Movies</h2>
+          <a href="#" class="link-small">View All →</a>
+        </div>
+        <div class="card-grid">
+          <article class="card">
+            <div class="card-poster"></div>
+            <div class="card-body">
+              <div class="card-title">Hanu-Man</div>
+              <div class="card-meta">
+                <span>2024 • Fantasy</span><span>⭐ 6.5</span>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-poster"></div>
+            <div class="card-body">
+              <div class="card-title">Gharat Ganpati</div>
+              <div class="card-meta">
+                <span>2024 • Family</span><span>⭐ 7.8</span>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-poster"></div>
+            <div class="card-body">
+              <div class="card-title">Premachi Goshta 2</div>
+              <div class="card-meta">
+                <span>2025 • Romance</span><span>⭐ 7.2</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- WEB SERIES -->
+      <section>
+        <div class="section-header">
+          <h2>Web Series</h2>
+          <a href="#" class="link-small">View All →</a>
+        </div>
+        <div class="card-grid">
+          <article class="card">
+            <div class="card-poster"></div>
+            <div class="card-body">
+              <div class="card-title">The Great Indian Murder</div>
+              <div class="card-meta">
+                <span>2022 • Crime</span><span>⭐ 7.0</span>
+              </div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-poster"></div>
+            <div class="card-body">
+              <div class="card-title">Mandala Murders</div>
+              <div class="card-meta">
+                <span>2025 • Thriller</span><span>⭐ 7.1</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="footer-col">
+        <h4>GuruFlix</h4>
+        <p>Your legal destination for movies, series, and more.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <a href="#">Home</a>
+        <a href="#">Movies</a>
+        <a href="#">Series</a>
+        <a href="#">Request Content</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#">Contact Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 GuruFlix. All rights reserved.</span>
+      <span class="disclaimer">
+        Use this layout only for legal, licensed content. Do not host pirated material.
+      </span>
+    </div>
+  </footer>
+</body>
+</html>
