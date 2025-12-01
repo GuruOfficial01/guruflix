@@ -1,116 +1,102 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GuruMovies</title>
+<script>
+  // ==== SETTINGS ====
+  const TMDB_API_KEY = "YOUR_TMDB_API_KEY"; // इथे तुझी key
+  const TMDB_BASE = "https://api.themoviedb.org/3";
+  const TMDB_IMG = "https://image.tmdb.org/t/p/w500";
 
-  <style>
-    body {
-      margin: 0;
-      background: #030712;
-      color: white;
-      font-family: Arial, sans-serif;
+  const grid = document.getElementById("moviesGrid");
+  const filterChips = document.querySelectorAll(".chip[data-filter]");
+
+  // TMDB URL वेगवेगळ्या filters साठी
+  function getUrl(filter) {
+    switch (filter) {
+      case "popular":
+        return `${TMDB_BASE}/movie/popular?api_key=${TMDB_API_KEY}&language=en-IN&page=1`;
+      case "trending":
+        return `${TMDB_BASE}/trending/movie/week?api_key=${TMDB_API_KEY}&language=en-IN`;
+      case "marathi":
+        return `${TMDB_BASE}/discover/movie?api_key=${TMDB_API_KEY}&with_original_language=mr&sort_by=popularity.desc&page=1`;
+      case "hindi":
+        return `${TMDB_BASE}/discover/movie?api_key=${TMDB_API_KEY}&with_original_language=hi&sort_by=popularity.desc&page=1`;
+      case "south":
+        // Telugu + Tamil + Malayalam mix
+        return `${TMDB_BASE}/discover/movie?api_key=${TMDB_API_KEY}&with_original_language=te,ta,ml&sort_by=popularity.desc&page=1`;
+      case "action":
+        return `${TMDB_BASE}/discover/movie?api_key=${TMDB_API_KEY}&with_genres=28&sort_by=popularity.desc&page=1`;
+      case "drama":
+        return `${TMDB_BASE}/discover/movie?api_key=${TMDB_API_KEY}&with_genres=18&sort_by=popularity.desc&page=1`;
+      case "romance":
+        return `${TMDB_BASE}/discover/movie?api_key=${TMDB_API_KEY}&with_genres=10749&sort_by=popularity.desc&page=1`;
+      case "crime":
+        return `${TMDB_BASE}/discover/movie?api_key=${TMDB_API_KEY}&with_genres=80&sort_by=popularity.desc&page=1`;
+      case "all":
+      default:
+        return `${TMDB_BASE}/discover/movie?api_key=${TMDB_API_KEY}&sort_by=popularity.desc&page=1`;
     }
-    header {
-      background: #020617;
-      padding: 15px;
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-      color: #22c55e;
-    }
-    #movie-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 15px;
-      padding: 20px;
-    }
-    .movie {
-      background: #0f172a;
-      padding: 10px;
-      border-radius: 8px;
-      text-align: center;
-      transition: 0.3s;
-    }
-    .movie:hover {
-      transform: scale(1.05);
-    }
-    img {
-      width: 100%;
-      border-radius: 8px;
-    }
-    #search-box {
-      width: 90%;
-      margin: 15px auto;
-      display: block;
-      padding: 10px;
-      border-radius: 5px;
-      border: none;
-      font-size: 17px;
-    }
-  </style>
-</head>
+  }
 
-<body>
-  <header>GuruMovies</header>
+  // Card HTML तयार करणारी function
+  function createCard(movie) {
+    const poster = movie.poster_path
+      ? `${TMDB_IMG}${movie.poster_path}`
+      : "https://via.placeholder.com/500x750?text=No+Image";
+    const year = movie.release_date ? movie.release_date.slice(0, 4) : "----";
+    const rating = movie.vote_average ? movie.vote_average.toFixed(1) : "--";
+    const title = movie.title || movie.name || "Untitled";
 
-  <input type="text" id="search-box" placeholder="Search movies..." oninput="searchMovie()">
+    return `
+      <article class="card">
+        <div class="poster">
+          <div class="poster-chip">${year}</div>
+          <img src="${poster}" alt="${title}" class="poster-img" loading="lazy" />
+          <div class="poster-rating">★ ${rating}</div>
+        </div>
+        <div class="body">
+          <div class="title" title="${title}">${title}</div>
+          <div class="meta-row">
+            <span>${year} · ${movie.original_language?.toUpperCase() || "N/A"}</span>
+            <span class="tag">TMDB</span>
+          </div>
+        </div>
+      </article>
+    `;
+  }
 
-  <div id="movie-container"></div>
+  // Movies load करणारी function
+  async function loadMovies(filter = "all") {
+    try {
+      grid.innerHTML = "<p style='grid-column: 1 / -1; padding:8px; color:#9ca3af;'>Loading…</p>";
+      const url = getUrl(filter);
+      const res = await fetch(url);
+      const data = await res.json();
 
-  <script>
-    const API_KEY = "PASTE_YOUR_TMDB_API_KEY_HERE"; // 🔥 इथे तुझी API key टाक
-
-    const API_URL = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=1`;
-    const IMG_URL = "https://image.tmdb.org/t/p/w500";
-
-    const movieContainer = document.getElementById("movie-container");
-
-    // Load popular movies
-    async function loadMovies() {
-      const response = await fetch(API_URL);
-      const data = await response.json();
-
-      displayMovies(data.results);
-    }
-
-    // Display movie cards
-    function displayMovies(movies) {
-      movieContainer.innerHTML = "";
-
-      movies.forEach(movie => {
-        const movieDiv = document.createElement("div");
-        movieDiv.classList.add("movie");
-
-        movieDiv.innerHTML = `
-          <img src="${IMG_URL + movie.poster_path}" alt="${movie.title}">
-          <h3>${movie.title}</h3>
-          <p>⭐ ${movie.vote_average}</p>
-        `;
-
-        movieContainer.appendChild(movieDiv);
-      });
-    }
-
-    // Search movies
-    async function searchMovie() {
-      const query = document.getElementById("search-box").value;
-
-      if (query.length < 1) {
-        loadMovies();
+      if (!data.results || !data.results.length) {
+        grid.innerHTML = "<p style='grid-column: 1 / -1; padding:8px; color:#9ca3af;'>No movies found.</p>";
         return;
       }
 
-      const searchURL = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`;
-
-      const response = await fetch(searchURL);
-      const data = await response.json();
-
-      displayMovies(data.results);
+      grid.innerHTML = data.results
+        .slice(0, 20)     // जास्त movies नको असतील तर limit
+        .map(createCard)
+        .join("");
+    } catch (err) {
+      console.error(err);
+      grid.innerHTML = "<p style='grid-column: 1 / -1; padding:8px; color:#f87171;'>Error loading movies.</p>";
     }
+  }
 
-    loadMovies();
-  </script>
-</body>
-</html>
+  // Filters click events
+  filterChips.forEach(chip => {
+    chip.addEventListener("click", () => {
+      // active class बदल
+      filterChips.forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+
+      const filter = chip.getAttribute("data-filter");
+      loadMovies(filter);
+    });
+  });
+
+  // Page load झाल्यावर All movies
+  loadMovies("all");
+</script>
