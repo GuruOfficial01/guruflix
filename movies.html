@@ -1,72 +1,116 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Movies – GuruMovies</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GuruMovies</title>
 
   <style>
-    body { background:#020617; color:white; font-family:sans-serif; padding:20px; }
-    .chips{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
-    .chip{ padding:6px 14px; border-radius:20px; background:#0f172a; cursor:pointer; }
-    .chip.active{ background:#22c55e; color:black; }
-    .grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(140px,1fr)); gap:15px; }
-    .card{ background:#0f172a; border-radius:12px; overflow:hidden; }
-    .poster img{ width:100%; display:block; }
-    .title{ padding:8px; font-size:14px; }
+    body {
+      margin: 0;
+      background: #030712;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      background: #020617;
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: #22c55e;
+    }
+    #movie-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 15px;
+      padding: 20px;
+    }
+    .movie {
+      background: #0f172a;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      transition: 0.3s;
+    }
+    .movie:hover {
+      transform: scale(1.05);
+    }
+    img {
+      width: 100%;
+      border-radius: 8px;
+    }
+    #search-box {
+      width: 90%;
+      margin: 15px auto;
+      display: block;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 17px;
+    }
   </style>
 </head>
+
 <body>
+  <header>GuruMovies</header>
 
-<h2>All Movies</h2>
+  <input type="text" id="search-box" placeholder="Search movies..." oninput="searchMovie()">
 
-<div class="chips">
-  <div class="chip active" data-type="popular">Popular</div>
-  <div class="chip" data-type="top_rated">Top Rated</div>
-  <div class="chip" data-type="upcoming">Upcoming</div>
-</div>
+  <div id="movie-container"></div>
 
-<div class="grid" id="grid"></div>
+  <script>
+    const API_KEY = "PASTE_YOUR_TMDB_API_KEY_HERE"; // 🔥 इथे तुझी API key टाक
 
-<script>
-const API_KEY = "1c23c182a195909bab8214c34cdf04ce";  // ← तुझी API key
+    const API_URL = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=1`;
+    const IMG_URL = "https://image.tmdb.org/t/p/w500";
 
-const grid = document.getElementById("grid");
-const chips = document.querySelectorAll(".chip");
+    const movieContainer = document.getElementById("movie-container");
 
-async function loadMovies(type="popular"){
-  grid.innerHTML = "<p>Loading...</p>";
+    // Load popular movies
+    async function loadMovies() {
+      const response = await fetch(API_URL);
+      const data = await response.json();
 
-  try{
-    const url = `https://api.themoviedb.org/3/movie/${type}?api_key=${API_KEY}`;
-    const res = await fetch(url);
-    const data = await res.json();
+      displayMovies(data.results);
+    }
 
-    grid.innerHTML = data.results.slice(0,20).map(m => `
-      <div class="card">
-        <div class="poster">
-          <img src="https://image.tmdb.org/t/p/w500${m.poster_path}" 
-               onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
-        </div>
-        <div class="title">${m.title}</div>
-      </div>
-    `).join("");
-  }
-  catch(err){
-    grid.innerHTML = `<p style="color:red;">Error loading movies.</p>`;
-  }
-}
+    // Display movie cards
+    function displayMovies(movies) {
+      movieContainer.innerHTML = "";
 
-chips.forEach(c=>{
-  c.addEventListener("click", ()=>{
-    chips.forEach(x=>x.classList.remove("active"));
-    c.classList.add("active");
-    loadMovies(c.dataset.type);
-  });
-});
+      movies.forEach(movie => {
+        const movieDiv = document.createElement("div");
+        movieDiv.classList.add("movie");
 
-loadMovies(); // default
-</script>
+        movieDiv.innerHTML = `
+          <img src="${IMG_URL + movie.poster_path}" alt="${movie.title}">
+          <h3>${movie.title}</h3>
+          <p>⭐ ${movie.vote_average}</p>
+        `;
 
+        movieContainer.appendChild(movieDiv);
+      });
+    }
+
+    // Search movies
+    async function searchMovie() {
+      const query = document.getElementById("search-box").value;
+
+      if (query.length < 1) {
+        loadMovies();
+        return;
+      }
+
+      const searchURL = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`;
+
+      const response = await fetch(searchURL);
+      const data = await response.json();
+
+      displayMovies(data.results);
+    }
+
+    loadMovies();
+  </script>
 </body>
 </html>
