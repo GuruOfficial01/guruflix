@@ -1,102 +1,510 @@
-<script>
-  // ==== SETTINGS ====
-  const TMDB_API_KEY = "YOUR_TMDB_API_KEY"; // इथे तुझी key
-  const TMDB_BASE = "https://api.themoviedb.org/3";
-  const TMDB_IMG = "https://image.tmdb.org/t/p/w500";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>GuruMovies – Movie Website</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  const grid = document.getElementById("moviesGrid");
-  const filterChips = document.querySelectorAll(".chip[data-filter]");
-
-  // TMDB URL वेगवेगळ्या filters साठी
-  function getUrl(filter) {
-    switch (filter) {
-      case "popular":
-        return `${TMDB_BASE}/movie/popular?api_key=${TMDB_API_KEY}&language=en-IN&page=1`;
-      case "trending":
-        return `${TMDB_BASE}/trending/movie/week?api_key=${TMDB_API_KEY}&language=en-IN`;
-      case "marathi":
-        return `${TMDB_BASE}/discover/movie?api_key=${TMDB_API_KEY}&with_original_language=mr&sort_by=popularity.desc&page=1`;
-      case "hindi":
-        return `${TMDB_BASE}/discover/movie?api_key=${TMDB_API_KEY}&with_original_language=hi&sort_by=popularity.desc&page=1`;
-      case "south":
-        // Telugu + Tamil + Malayalam mix
-        return `${TMDB_BASE}/discover/movie?api_key=${TMDB_API_KEY}&with_original_language=te,ta,ml&sort_by=popularity.desc&page=1`;
-      case "action":
-        return `${TMDB_BASE}/discover/movie?api_key=${TMDB_API_KEY}&with_genres=28&sort_by=popularity.desc&page=1`;
-      case "drama":
-        return `${TMDB_BASE}/discover/movie?api_key=${TMDB_API_KEY}&with_genres=18&sort_by=popularity.desc&page=1`;
-      case "romance":
-        return `${TMDB_BASE}/discover/movie?api_key=${TMDB_API_KEY}&with_genres=10749&sort_by=popularity.desc&page=1`;
-      case "crime":
-        return `${TMDB_BASE}/discover/movie?api_key=${TMDB_API_KEY}&with_genres=80&sort_by=popularity.desc&page=1`;
-      case "all":
-      default:
-        return `${TMDB_BASE}/discover/movie?api_key=${TMDB_API_KEY}&sort_by=popularity.desc&page=1`;
+  <style>
+    :root {
+      --bg-main: #020617;
+      --bg-card: #0f172a;
+      --bg-header: #020617;
+      --accent: #22c55e;
+      --accent-soft: #0ea5e9;
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --border-subtle: #1f2937;
     }
-  }
 
-  // Card HTML तयार करणारी function
-  function createCard(movie) {
-    const poster = movie.poster_path
-      ? `${TMDB_IMG}${movie.poster_path}`
-      : "https://via.placeholder.com/500x750?text=No+Image";
-    const year = movie.release_date ? movie.release_date.slice(0, 4) : "----";
-    const rating = movie.vote_average ? movie.vote_average.toFixed(1) : "--";
-    const title = movie.title || movie.name || "Untitled";
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    return `
-      <article class="card">
-        <div class="poster">
-          <div class="poster-chip">${year}</div>
-          <img src="${poster}" alt="${title}" class="poster-img" loading="lazy" />
-          <div class="poster-rating">★ ${rating}</div>
-        </div>
-        <div class="body">
-          <div class="title" title="${title}">${title}</div>
-          <div class="meta-row">
-            <span>${year} · ${movie.original_language?.toUpperCase() || "N/A"}</span>
-            <span class="tag">TMDB</span>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #111827 0, #020617 55%);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(to right, #020617, #020617cc, #020617);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .logo-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      border: 1px solid var(--accent-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      background: radial-gradient(circle at top, #0f172a, #020617);
+      box-shadow: 0 0 18px #22c55e44;
+    }
+
+    .logo span {
+      background: linear-gradient(to right, #22c55e, #0ea5e9);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    /* SEARCH + FILTER BAR */
+    .top-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-box {
+      flex: 1 1 210px;
+      max-width: 340px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 8px 10px 8px 30px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: #020617;
+      color: var(--text-main);
+      outline: none;
+      font-size: 14px;
+    }
+
+    .search-box input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 9px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px;
+      color: var(--accent-soft);
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .filter-btn {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: #020617;
+      color: var(--text-muted);
+      font-size: 12px;
+      cursor: pointer;
+      transition: 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--accent-soft);
+      color: var(--text-main);
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(to right, #22c55e, #0ea5e9);
+      border-color: transparent;
+      color: #020617;
+      font-weight: 600;
+    }
+
+    /* MAIN */
+    main {
+      padding: 16px 12px 30px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding: 0 3px;
+    }
+
+    .section-title h2 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .section-title span {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* GRID */
+    #movie-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 14px;
+    }
+
+    .movie-card {
+      background: radial-gradient(circle at top, #111827, #020617);
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid #1f2937;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .movie-card:hover {
+      transform: translateY(-4px) scale(1.02);
+      border-color: #22c55eaa;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.9);
+    }
+
+    .movie-poster {
+      width: 100%;
+      aspect-ratio: 2/3;
+      object-fit: cover;
+      display: block;
+    }
+
+    .movie-fallback {
+      width: 100%;
+      aspect-ratio: 2/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: repeating-linear-gradient(
+        135deg,
+        #020617,
+        #020617 8px,
+        #0b1120 8px,
+        #0b1120 16px
+      );
+    }
+
+    .movie-info {
+      padding: 8px 9px 10px;
+    }
+
+    .movie-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      min-height: 32px;
+    }
+
+    .movie-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .badge-rating {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.12);
+      color: #bbf7d0;
+      font-size: 11px;
+    }
+
+    .badge-rating span {
+      font-size: 10px;
+    }
+
+    .badge-date {
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid #1f2937;
+      font-size: 10px;
+    }
+
+    /* STATUS / ERROR TEXT */
+    #status-message {
+      text-align: center;
+      margin: 16px 0 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 12px 0 16px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    footer span {
+      color: #22c55e;
+    }
+
+    @media (min-width: 768px) {
+      header {
+        padding: 12px 32px;
+      }
+      main {
+        padding: 20px 24px 36px;
+      }
+      .section-title h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <div class="logo-badge">G</div>
+      <span>GuruMovies</span>
+    </div>
+
+    <div class="top-bar">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search movies (naam taka)..."
+        />
+      </div>
+
+      <div class="filters">
+        <button class="filter-btn active" data-type="popular">Popular</button>
+        <button class="filter-btn" data-type="top_rated">Top Rated</button>
+        <button class="filter-btn" data-type="upcoming">Upcoming</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <div class="section-title">
+      <h2 id="section-heading">Popular Movies</h2>
+      <span id="result-count"></span>
+    </div>
+
+    <p id="status-message">Loading movies for you, Guru…</p>
+
+    <div id="movie-container"></div>
+  </main>
+
+  <footer>
+    Made with <span>❤</span> by Guru
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    // ============================
+    //   🔐 API SETUP
+    // ============================
+    // 👉 इथे तुझी TMDB API key टाक:
+    const API_KEY = "PASTE_YOUR_TMDB_API_KEY_HERE";
+
+    const BASE_URL = "https://api.themoviedb.org/3";
+    const IMG_URL = "https://image.tmdb.org/t/p/w500";
+
+    const movieContainer = document.getElementById("movie-container");
+    const statusMessage = document.getElementById("status-message");
+    const resultCount = document.getElementById("result-count");
+    const sectionHeading = document.getElementById("section-heading");
+    const searchInput = document.getElementById("search-input");
+    const filterButtons = document.querySelectorAll(".filter-btn");
+
+    // ============================
+    //   🌐 FETCH HELPER
+    // ============================
+    async function fetchMovies(url, label = "") {
+      try {
+        statusMessage.textContent = "Loading…";
+        movieContainer.innerHTML = "";
+
+        const res = await fetch(url);
+        if (!res.ok) {
+          throw new Error("Network response not ok");
+        }
+
+        const data = await res.json();
+        const movies = data.results || [];
+
+        if (!movies.length) {
+          statusMessage.textContent = "No movies found. (Movie sapdle nahi)";
+          resultCount.textContent = "";
+          return;
+        }
+
+        statusMessage.textContent = "";
+        resultCount.textContent = `${movies.length} movies`;
+
+        renderMovies(movies);
+      } catch (err) {
+        console.error(err);
+        statusMessage.textContent =
+          "Error loading movies. (API / Internet check kar)";
+        resultCount.textContent = "";
+      }
+    }
+
+    // ============================
+    //   🎬 RENDER MOVIES
+    // ============================
+    function renderMovies(movies) {
+      movieContainer.innerHTML = "";
+
+      movies.forEach((movie) => {
+        const card = document.createElement("div");
+        card.className = "movie-card";
+
+        const posterPath = movie.poster_path
+          ? `${IMG_URL}${movie.poster_path}`
+          : null;
+
+        const title = movie.title || movie.name || "Untitled";
+        const rating = movie.vote_average
+          ? movie.vote_average.toFixed(1)
+          : "N/A";
+        const date = movie.release_date || movie.first_air_date || "—";
+
+        card.innerHTML = `
+          ${
+            posterPath
+              ? `<img src="${posterPath}" alt="${title}" class="movie-poster" loading="lazy" />`
+              : `<div class="movie-fallback">Poster<br/>Not<br/>Available</div>`
+          }
+          <div class="movie-info">
+            <div class="movie-title">${title}</div>
+            <div class="movie-meta">
+              <div class="badge-rating">
+                ⭐ <span>${rating}</span>
+              </div>
+              <div class="badge-date">${date}</div>
+            </div>
           </div>
-        </div>
-      </article>
-    `;
-  }
+        `;
 
-  // Movies load करणारी function
-  async function loadMovies(filter = "all") {
-    try {
-      grid.innerHTML = "<p style='grid-column: 1 / -1; padding:8px; color:#9ca3af;'>Loading…</p>";
-      const url = getUrl(filter);
-      const res = await fetch(url);
-      const data = await res.json();
+        movieContainer.appendChild(card);
+      });
+    }
 
-      if (!data.results || !data.results.length) {
-        grid.innerHTML = "<p style='grid-column: 1 / -1; padding:8px; color:#9ca3af;'>No movies found.</p>";
+    // ============================
+    //   🔘 FILTER BUTTONS
+    // ============================
+    function setActiveFilter(type) {
+      filterButtons.forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.type === type);
+      });
+    }
+
+    function loadCategory(type) {
+      let endpoint = "";
+      let heading = "";
+
+      if (type === "popular") {
+        endpoint = "/movie/popular";
+        heading = "Popular Movies";
+      } else if (type === "top_rated") {
+        endpoint = "/movie/top_rated";
+        heading = "Top Rated Movies";
+      } else if (type === "upcoming") {
+        endpoint = "/movie/upcoming";
+        heading = "Upcoming Movies";
+      } else {
+        endpoint = "/movie/popular";
+        heading = "Popular Movies";
+      }
+
+      sectionHeading.textContent = heading;
+
+      const url = `${BASE_URL}${endpoint}?api_key=${API_KEY}&language=en-US&page=1`;
+      fetchMovies(url, heading);
+    }
+
+    filterButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const type = btn.dataset.type;
+        setActiveFilter(type);
+        searchInput.value = ""; // search clear
+        loadCategory(type);
+      });
+    });
+
+    // ============================
+    //   🔍 SEARCH
+    // ============================
+    let searchTimeout = null;
+
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.trim();
+
+      if (!query) {
+        // जर search रिकामी असेल तर active category load कर
+        const activeBtn = document.querySelector(".filter-btn.active");
+        const type = activeBtn ? activeBtn.dataset.type : "popular";
+        loadCategory(type);
         return;
       }
 
-      grid.innerHTML = data.results
-        .slice(0, 20)     // जास्त movies नको असतील तर limit
-        .map(createCard)
-        .join("");
-    } catch (err) {
-      console.error(err);
-      grid.innerHTML = "<p style='grid-column: 1 / -1; padding:8px; color:#f87171;'>Error loading movies.</p>";
-    }
-  }
+      if (searchTimeout) {
+        clearTimeout(searchTimeout);
+      }
 
-  // Filters click events
-  filterChips.forEach(chip => {
-    chip.addEventListener("click", () => {
-      // active class बदल
-      filterChips.forEach(c => c.classList.remove("active"));
-      chip.classList.add("active");
-
-      const filter = chip.getAttribute("data-filter");
-      loadMovies(filter);
+      searchTimeout = setTimeout(() => {
+        sectionHeading.textContent = `Search: "${query}"`;
+        const url = `${BASE_URL}/search/movie?api_key=${API_KEY}&language=en-US&query=${encodeURIComponent(
+          query
+        )}&page=1&include_adult=false`;
+        fetchMovies(url, "Search");
+      }, 400); // typing debounce
     });
-  });
 
-  // Page load झाल्यावर All movies
-  loadMovies("all");
-</script>
+    // ============================
+    //   🚀 INITIAL LOAD
+    // ============================
+    window.addEventListener("DOMContentLoaded", () => {
+      loadCategory("popular");
+    });
+  </script>
+</body>
+</html>
